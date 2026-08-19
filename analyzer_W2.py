@@ -164,13 +164,14 @@ if __name__ == "__main__":
 
     
     expts = {
+        "bulinda_FE_example_sweep": "e932f2be-74e2-4be6-9e28-5e973e6318ff"
         #'week2_weather' : '2c090358-cb7b-44e5-a2fd-842a6c23a5b7'
-        'week2_outputs' : '92e86035-aaf6-4cbf-be6d-6369586e6a2c'
+        #'week2_outputs' : '142fd52a-981d-468c-a3cf-2900f0290490'
     }
     
 
     jdir = manifest.job_directory
-    wdir = os.path.join(jdir, 'my_outputs')
+    wdir = os.path.join(jdir, 'output')
     
     if not os.path.exists(wdir):
         os.mkdir(wdir)

@@ -12,7 +12,7 @@ import manifest
 
 class MonthlyPfPRAnalyzerU5(IAnalyzer):
 
-    def __init__(self, expt_name, sweep_variables=None, working_dir='./', start_year=2020, end_year=2023,
+    def __init__(self, expt_name, sweep_variables=None, working_dir='./', start_year=2000, end_year=2020,
                  burnin=None, filter_exists=False):
 
         super(MonthlyPfPRAnalyzerU5, self).__init__(working_dir=working_dir,
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     expts = {
         # 'week2_weather' : '2c090358-cb7b-44e5-a2fd-842a6c23a5b7'
         # 'week2_outputs' : '26f947c3-0770-46df-bc6a-c1c77e36f686'
-        'week3_calib': 'f27386a6-3958-46b3-8ec0-08df81c67ffc'
+        "bulinda_FE_example_calibration": "b93bc451-6edd-4024-b6d6-6b6c2896b695"
     }
 
     jdir = manifest.job_directory
@@ -113,8 +113,8 @@ if __name__ == "__main__":
 
         for expt_name, exp_id in expts.items():
             analyzer = [MonthlyPfPRAnalyzerU5(expt_name=expt_name,
-                                              start_year=2010,
-                                              end_year=2015,
+                                              start_year=2000,
+                                              end_year=2020,
                                               sweep_variables=sweep_variables,
                                               working_dir=wdir)]
 
