@@ -1,0 +1,47 @@
+
+=== J by county and xTLH, scored against MIS RDT ===
+xTLH      0.1500  0.1937  0.2502  0.3232  0.4174  0.5391  0.6962  0.8992  1.1614  1.5000
+county                                                                                  
+bungoma     19.4    19.4    19.4    19.4    18.9    18.7    18.7    17.7    17.4    17.2
+busia       68.3    68.3    68.3    68.3    68.3    68.3    68.3    68.3    68.3    64.9
+homa bay    94.2    94.2    94.2    94.2    94.1    94.2    94.1    94.1    85.4    85.4
+kakamega    17.8    17.8    17.8    17.8    17.8    17.8    17.8    17.8    17.7    17.8
+kisumu      27.7    27.7    27.7    27.7    27.7    27.7    27.7    27.7    27.7    27.7
+migori      24.1    24.1    24.1    24.1    24.1    24.1    24.1    23.2    23.2    21.6
+siaya       95.5    95.5    95.5    95.5    95.5    95.5    95.5    95.5    95.5    95.5
+vihiga      14.3    14.3    14.3    14.3    14.3    14.3    14.3    14.3    14.3    12.3
+
+Best xTLH per county (RDT); range = xTLH with J within 3.84 of the minimum (rough 95% band, grid only):
+  bungoma   best 1.5000 (J=17.2, 2 points)  range 0.1500-1.5000   2015: model 0.5% vs MIS 22.7%  2020: model 2.0% vs MIS 24.7%
+  busia     best 1.5000 (J=64.9, 2 points)  range 0.1500-1.5000   2015: model 0.1% vs MIS 44.6%  2020: model 1.8% vs MIS 32.8%
+  homa bay  best 1.1614 (J=85.4, 2 points)  range 1.1614-1.5000   2015: model 0.2% vs MIS 23.7%  2020: model 1.2% vs MIS 2.8%
+  kakamega  best 1.1614 (J=17.7, 2 points)  range 0.1500-1.5000   2015: model 0.0% vs MIS 27.0%  2020: model 0.0% vs MIS 11.1%
+  kisumu    best 1.5000 (J=27.7, 2 points)  range 0.1500-1.5000   2015: model 0.0% vs MIS 28.4%  2020: model 0.0% vs MIS 11.8%
+  migori    best 1.5000 (J=21.6, 2 points)  range 0.1500-1.5000   2015: model 0.2% vs MIS 35.6%  2020: model 2.0% vs MIS 17.4%
+  siaya     best 1.5000 (J=95.5, 2 points)  range 0.1500-1.5000   2015: model 0.0% vs MIS 57.8%  2020: model 0.0% vs MIS 28.9%
+  vihiga    best 1.5000 (J=12.3, 2 points)  range 0.1500-1.5000   2015: model 0.0% vs MIS 21.6%  2020: model 1.8% vs MIS 5.1%
+
+=== J by county and xTLH, scored against MIS microscopy ===
+xTLH      0.1500  0.1937  0.2502  0.3232  0.4174  0.5391  0.6962  0.8992  1.1614  1.5000
+county                                                                                  
+bungoma     15.8    15.8    15.8    15.8    14.9    14.5    14.5    12.8    12.3    11.8
+busia       88.4    88.3    88.4    88.4    88.4    88.3    88.3    88.3    88.3    81.4
+homa bay    22.2    22.2    22.2    22.2    22.2    22.2    22.2    22.2    18.2    18.8
+kakamega    15.5    15.5    15.5    15.5    15.5    15.5    15.5    15.5    15.5    15.5
+kisumu      14.6    14.6    14.6    14.6    14.6    14.6    14.6    14.6    14.6    14.6
+migori      20.3    20.3    20.3    20.3    20.3    20.3    20.3    19.3    19.2    17.6
+siaya       12.6    12.6    12.6    12.6    12.6    12.6    12.6    12.6    12.6    12.6
+vihiga      15.3    15.3    15.3    15.3    15.3    15.3    15.3    15.3    15.3    12.9
+
+Best xTLH per county (microscopy); range = xTLH with J within 3.84 of the minimum (rough 95% band, grid only):
+  bungoma   best 1.5000 (J=11.8, 2 points)  range 0.4174-1.5000   2015: model 0.5% vs MIS 4.6%  2020: model 2.0% vs MIS 13.6%
+  busia     best 1.5000 (J=81.4, 2 points)  range 1.5000-1.5000   2015: model 0.1% vs MIS 22.9%  2020: model 1.8% vs MIS 21.8%
+  homa bay  best 1.1614 (J=18.2, 2 points)  range 1.1614-1.5000   2015: model 0.2% vs MIS 14.4%  2020: model 1.2% vs MIS 1.9%
+  kakamega  best 1.1614 (J=15.5, 2 points)  range 0.1500-1.5000   2015: model 0.0% vs MIS 11.7%  2020: model 0.0% vs MIS 5.2%
+  kisumu    best 1.5000 (J=14.6, 2 points)  range 0.1500-1.5000   2015: model 0.0% vs MIS 14.1%  2020: model 0.0% vs MIS 10.6%
+  migori    best 1.5000 (J=17.6, 2 points)  range 0.1500-1.5000   2015: model 0.2% vs MIS 31.1%  2020: model 2.0% vs MIS 13.6%
+  siaya     best 1.5000 (J=12.6, 2 points)  range 0.1500-1.5000   2015: model 0.0% vs MIS 21.1%  2020: model 0.0% vs MIS 15.0%
+  vihiga    best 1.5000 (J=12.9, 2 points)  range 0.1500-1.5000   2015: model 0.0% vs MIS 12.4%  2020: model 1.8% vs MIS 6.0%
+
+Saved: calibration_model_prevalence.csv, calibration_J_by_county_xTLH.csv
+Reminder: two survey points per county and one parameter; J near 0-4 means consistent, large J means the model cannot reproduce both surveys with this parameter alone.

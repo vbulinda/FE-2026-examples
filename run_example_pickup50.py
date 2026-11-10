@@ -30,7 +30,7 @@ sim_start_year=2000
 num_seeds = 2
 serialize_years = 50
 pickup_years=5
-burnin_exp_id = '01f366b7-1eae-43af-9479-c67d7e3bf74c'
+burnin_exp_id = '78de4966-c160-4529-8e0d-8d2610d36fc1'
 
 def set_param_fn(config):
     """
@@ -154,13 +154,13 @@ def general_sim(selected_platform):
                        start_day=1, end_day=sim_years*365,
                        node_ids=[1], min_age_years=0,
                        max_age_years=100)
-    add_malaria_summary_report(task, manifest, start_day=1,
-                               end_day=sim_years*365,
-                               reporting_interval=30,
-                               age_bins=[0.25, 5, 115],
-                               max_number_reports=20,
-                               filename_suffix='monthly',
-                               pretty_format=True)
+    # add_malaria_summary_report(task, manifest, start_day=1,
+    #                            end_day=sim_years*365,
+    #                            reporting_interval=30,
+    #                            age_bins=[0.25, 5, 115],
+    #                            max_number_reports=20,
+    #                            filename_suffix='monthly',
+    #                            pretty_format=True)
     # create experiment from builder
     for year in range(sim_years):
         start_day = 0 + 365 * year
@@ -174,7 +174,7 @@ def general_sim(selected_platform):
     user = os.getlogin()
     #experiment = Experiment.from_task(task, name=f'{user}_FE_example_sweep')
     #experiment = Experiment.from_builder(builder, task, name='{user}_FE_example_sweep')
-    experiment = Experiment.from_builder(builder, task, name=f'{user} my_output')
+    experiment = Experiment.from_builder(builder, task, name=f'{user}_pickup50')
     # The last step is to call run() on the ExperimentManager to run the simulations.
     experiment.run(wait_until_done=False, platform=platform)
 

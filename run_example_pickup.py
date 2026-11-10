@@ -1,208 +1,214 @@
-#idmtools  
-from idmtools.assets import Asset, AssetCollection  
+"""
+run_lake_pickup.py  -  Stage 8 (version 1): TEST pickup, Lake Victoria, 8 counties
+
+Starts from the saved population states of a burn-in (BURNIN_EXP_ID), carries over that burn-in's
+x_Temporary_Larval_Habitat and seed, then runs PICKUP_YEARS more years with:
+  - case management (treatment seeking) in all 8 nodes   <- PLACEHOLDER coverage, see CM_* below
+  - the same reports as before (monthly summary, births per node, daily spatial report)
+ITN and IRS are NOT added yet. Add them in version 2 once this version succeeds.
+
+One pickup simulation is made per burn-in simulation (3 for the test burn-in).
+Run from the FE-2026-examples folder (needs manifest.py and utils_slurm.py there):
+    python run_lake_pickup.py
+"""
+import os
+import sys
+import pathlib
+from functools import partial
+import pandas as pd
+
 from idmtools.builders import SimulationBuilder
 from idmtools.core.platform_factory import Platform
 from idmtools.entities.experiment import Experiment
-from idmtools.builders import SimulationBuilder
-
-#emodpy
 from emodpy.emod_task import EMODTask
-import emod_api.config.default_from_schema_no_validation as dfs
 import emod_api.campaign as camp
-
-#emodpy-malaria
-import emodpy_malaria.demographics.MalariaDemographics as Demographics
-
 import emodpy_malaria.demographics.MalariaDemographics as Demographics
 import emod_api.demographics.PreDefinedDistributions as Distributions
+import emodpy_malaria.interventions.treatment_seeking as cm
 from emodpy_malaria.reporters.builtin import *
-import manifest
-import numpy as np
-import os
-from functools import partial
 
+import manifest
+sys.path.append(os.getcwd())
 from utils_slurm import build_burnin_df
 
-#serialize_years= 10
+# ---------------- settings ----------------
+BURNIN_EXP_ID   = "9e650ad0-ed2f-43db-b1e6-4e8abb7a687b"   # the finished test burn-in
+SERIALIZE_YEARS = 2          # must equal SERIALIZE_YEARS used in the burn-in
+PICKUP_YEARS    = 3          # test length
+TEST_POP        = 1000       # must equal TEST_POP used in the burn-in
+ID_REF          = "LAKE_VICTORIA"
+CLIMATE_DIR     = os.path.join("climate", "LAKE", "2010001-2019365")
+NODES_FILE      = os.path.join(manifest.input_dir, "demographics", "lake_nodes.csv")
+SPECIES         = ["gambiae", "arabiensis", "funestus"]
+FILES = {"air": "dtk_15arcmin_air_temperature_daily", "land": "dtk_15arcmin_land_temperature_daily",
+         "rh": "dtk_15arcmin_relative_humidity_daily", "rain": "dtk_15arcmin_rainfall_daily"}
+# PLACEHOLDER care-seeking coverage (fraction of cases treated). Replace with Lake-zone values from the MIS.
+CM_U5, CM_5_15, CM_15PLUS, CM_SEVERE = 0.40, 0.24, 0.16, 0.80
+# ------------------------------------------
 
-sim_years = 10
-sim_start_year=2000
-num_seeds = 2
-serialize_years = 10
-pickup_years=5
-burnin_exp_id = '01f366b7-1eae-43af-9479-c67d7e3bf74c'
 
 def set_param_fn(config):
-    """
-    This function is a callback that is passed to emod-api.config to set config parameters, including the malaria defaults.
-    """
     import emodpy_malaria.malaria_config as conf
     config = conf.set_team_defaults(config, manifest)
     config.parameters.Climate_Model = "CLIMATE_BY_DATA"
-   
-    # Defaults to 0 (off) in the installed Eradication build's schema - turn on so
-    # InsetChart.json gets written to each simulation's output folder.
     config.parameters.Enable_Default_Reporting = 1
-   
-    ## existing contents
-    # config.parameters.Air_Temperature_Filename = os.path.join('/shared/home/bulinda/FE-2026-examples/climate/emod_weather_upper_east',
-    #   'air_temperature.bin')
-    config.parameters.Air_Temperature_Filename = os.path.join('climate', 'air_temperature.bin')
-    config.parameters.Land_Temperature_Filename = os.path.join('climate', 'land_temperature.bin')
-    config.parameters.Rainfall_Filename = os.path.join('climate', 'rainfall.bin')
-    config.parameters.Relative_Humidity_Filename = os.path.join('climate', 'relative_humidity.bin')
 
-    conf.add_species(config, manifest, ["gambiae", "arabiensis", "funestus"])
+    config.parameters.Air_Temperature_Filename   = os.path.join(CLIMATE_DIR, FILES["air"] + ".bin")
+    config.parameters.Land_Temperature_Filename  = os.path.join(CLIMATE_DIR, FILES["land"] + ".bin")
+    config.parameters.Rainfall_Filename          = os.path.join(CLIMATE_DIR, FILES["rain"] + ".bin")
+    config.parameters.Relative_Humidity_Filename = os.path.join(CLIMATE_DIR, FILES["rh"] + ".bin")
 
-    config.parameters.Simulation_Duration = sim_years*365
-    config.parameters.Run_Number = 0
-    # as a global variable at the top of the script, like sim_years that we use to define simulation duration:
-#def set_param_fn():
-    ## existing contents
+    conf.add_species(config, manifest, SPECIES)
+    config.parameters.Simulation_Duration = PICKUP_YEARS * 365
 
-    #Add serialization - add burnin "write" parameters to config.json
-    # config.parameters.Serialized_Population_Writing_Type = "TIMESTEP"
-    # config.parameters.Serialization_Time_Steps = [365 * serialize_years]
-    # config.parameters.Serialization_Mask_Node_Write = 0
-        # config.parameters.Simulation_Start_Year = sim_start_year
-# def set_param_fn():
-    ## existing contents
-
-    #Add serialization - add pickup "read" parameters to config.json
+    # READ the burn-in state (the specific file and path are set per simulation below)
     config.parameters.Serialized_Population_Reading_Type = "READ"
     config.parameters.Serialization_Mask_Node_Read = 0
-    config.parameters.Serialization_Time_Steps = [serialize_years*365]
-    config.parameters.Serialization_Precision = "REDUCED"
-    #Add calibrated larval habitat
-    config.parameters.x_Temporary_Larval_Habitat = 0.681292
+    config.parameters.Serialization_Time_Steps = [SERIALIZE_YEARS * 365]
     return config
 
-def set_param(simulation, param, value):
-    """
-    Set specific parameter value
-    Args:
-        simulation: idmtools Simulation
-        param: parameter
-        value: new value
-    Returns:
-        dict
-    """
-    return simulation.task.set_parameter(param, value)
+
+def fix_property_restrictions(obj):
+    """EMOD needs these fields to be arrays. This emodpy-malaria build writes null in some events, so
+    replace anything that is not a list with an empty list (same fix as in site_setup_Kenya_LakeVictoria.py)."""
+    keys = ("Node_Property_Restrictions", "Property_Restrictions", "Property_Restrictions_Within_Node")
+    if isinstance(obj, dict):
+        for key, value in list(obj.items()):
+            if key in keys:
+                if not isinstance(value, list):
+                    obj[key] = []
+            else:
+                fix_property_restrictions(value)
+    elif isinstance(obj, list):
+        for item in obj:
+            fix_property_restrictions(item)
+
 
 def build_camp():
-    """
-    This function builds a campaign input file for the DTK using emod_api.
-    """
-
     camp.set_schema(manifest.schema_file)
-   
+    node_ids = pd.read_csv(NODES_FILE)["node_id"].tolist()
+    targets = [{"trigger": "NewClinicalCase", "coverage": CM_U5,      "agemin": 0,  "agemax": 5,   "rate": 0.3},
+               {"trigger": "NewClinicalCase", "coverage": CM_5_15,    "agemin": 5,  "agemax": 15,  "rate": 0.3},
+               {"trigger": "NewClinicalCase", "coverage": CM_15PLUS,  "agemin": 15, "agemax": 115, "rate": 0.3},
+               {"trigger": "NewSevereCase",   "coverage": CM_SEVERE,   "agemin": 0,  "agemax": 115, "rate": 0.5}]
+    cm.add_treatment_seeking(camp, start_day=1, drug=["Artemether", "Lumefantrine"],
+                             targets=targets, node_ids=node_ids,
+                             broadcast_event_name="Received_Treatment")
+    fix_property_restrictions(camp.campaign_dict)      # fixes the null Node_Property_Restrictions error
     return camp
 
 
-def build_demog():
-    """
-    This function builds a demographics input file for the DTK using emod_api.
-    """
+def update_serialize_parameters(simulation, df, x: int):
+    """Point this pickup simulation at the matching burn-in state; carry over its larval habitat and seed."""
+    path = df["serialized_file_path"][x]
+    xTLH = float(df["x_Temporary_Larval_Habitat"][x])
+    seed = int(df["Run_Number"][x])
+    simulation.task.set_parameter("Serialized_Population_Filenames", df["Serialized_Population_Filenames"][x])
+    simulation.task.set_parameter("Serialized_Population_Path", os.path.join(path, "output"))
+    simulation.task.set_parameter("x_Temporary_Larval_Habitat", xTLH)
+    simulation.task.set_parameter("Run_Number", seed)
+    return {"xTLH": xTLH, "Run_Number": seed}
 
-    demog = Demographics.from_template_node(lat=10.90, lon=-1.09, pop=1000, name="Navrongo")
+
+def build_demog():
+    """Same 8 nodes and population as the burn-in (must match for the state to load)."""
+    nodes = pd.read_csv(NODES_FILE)
+    nodes["pop"] = TEST_POP
+    nodes.to_csv("lake_nodes_test.csv", index=False)
+    demog = Demographics.from_csv(input_file="lake_nodes_test.csv", id_ref=ID_REF,
+                                  init_prev=0.01, include_biting_heterogeneity=True)
     demog.SetEquilibriumVitalDynamics()
-    age_distribution = Distributions.AgeDistribution_SSAfrica
-    demog.SetAgeDistribution(age_distribution)
+    demog.SetAgeDistribution(Distributions.AgeDistribution_SSAfrica)
     return demog
 
 
+def show_failure(exp_id):
+    """Print the end of the log of the first simulation folder that has an error, so the cause is visible."""
+    import glob
+    dirs = [d for d in glob.glob(os.path.join(manifest.job_directory, "**", "*" + exp_id + "*"), recursive=True) if os.path.isdir(d)]
+    if not dirs:
+        print("Experiment folder not found under", manifest.job_directory); return
+    names = ["StdErr.txt", "stderr.txt", "StdOut.txt", "stdout.txt", "stderr", "stdout", "job_status.txt"]
+    shown = 0
+    for sim in sorted(glob.glob(os.path.join(dirs[0], "*", ""))):
+        for n in names:
+            p = os.path.join(sim, n)
+            if os.path.exists(p) and os.path.getsize(p) > 0:
+                lines = open(p, errors="replace").read().splitlines()
+                print(f"\n--- {p} (last 25 lines) ---")
+                print("\n".join(lines[-25:]))
+                shown += 1
+        if shown:
+            break
+    if not shown:
+        print("No log files with content found. Folder listing:", os.listdir(dirs[0]))
+    print("\nPaste the log lines above to Claude.")
+
+
 def general_sim(selected_platform):
-    """
-    This function is designed to be a parameterized version of the sequence of things we do
-    every time we run an emod experiment.
-    """
-
-    # Set platform and associated values, such as the maximum number of jobs to run at one time.
-    # All cluster-specific settings live in manifest.py so users only edit that file.
     platform = Platform(selected_platform, job_directory=manifest.job_directory,
-                            partition=manifest.partition, time=manifest.sim_time,
-                            modules=[manifest.singularity_module],
-                            max_running_jobs=manifest.max_running_jobs)
+                        partition=manifest.partition, time=manifest.sim_time,
+                        modules=[manifest.singularity_module],
+                        max_running_jobs=manifest.max_running_jobs)
 
-    # create EMODTask
-    print("Creating EMODTask (from files)...")
-
-   
     task = EMODTask.from_default2(
-        config_path="config.json",
-        eradication_path=manifest.eradication_path,
-        campaign_builder=build_camp,
-        schema_path=manifest.schema_file,
-        param_custom_cb=set_param_fn,
-        ep4_custom_cb=None,
-        demog_builder=build_demog,
-        plugin_report=None
-    )
-   
-   
-    # set the singularity image to be used when running this experiment
+        config_path="config.json", eradication_path=manifest.eradication_path,
+        campaign_builder=build_camp, schema_path=manifest.schema_file,
+        param_custom_cb=set_param_fn, ep4_custom_cb=None,
+        demog_builder=build_demog, plugin_report=None)
     task.set_sif(manifest.SIF_PATH, platform)
-    #task.common_assets.add_directory(os.path.join('/shared/home/bulinda/FE-2026-examples'), relative_path="climate")
-   
-    task.common_assets.add_directory(os.path.join(manifest.input_dir, "emod_weather_upper_east"), relative_path="climate")
+    task.common_assets.add_directory(os.path.join(manifest.input_dir, "climate"), relative_path="climate")
+
+    # one pickup simulation per burn-in simulation
+    burnin_df = build_burnin_df(BURNIN_EXP_ID, platform, SERIALIZE_YEARS * 365)
+    print("Burn-in simulations found:", len(burnin_df))
+    print(burnin_df[["simid", "Run_Number", "x_Temporary_Larval_Habitat", "Serialized_Population_Filenames"]])
+    # PREFLIGHT: the saved state must exist where the pickup will look for it
+    bad = 0
+    for i in burnin_df.index:
+        outdir = os.path.join(burnin_df["serialized_file_path"][i], "output")
+        for fn in burnin_df["Serialized_Population_Filenames"][i]:
+            if not os.path.exists(os.path.join(outdir, fn)):
+                bad += 1
+                have = sorted(f for f in os.listdir(outdir)) if os.path.isdir(outdir) else ["(no output folder)"]
+                print(f"MISSING state file: {os.path.join(outdir, fn)}\n  files there: {have}")
+    if bad:
+        raise SystemExit("Saved states not found, so the pickup cannot start. Paste the lines above to Claude. "
+                         "Check that SERIALIZE_YEARS matches the burn-in (the file name holds the day number).")
+    print("Preflight OK: all burn-in state files found.")
+
     builder = SimulationBuilder()
-#    builder.add_sweep_definition(partial(set_param, param='Run_Number'), range(num_seeds))
-    builder.add_sweep_definition(partial(set_param, param='x_Temporary_Larval_Habitat'), np.logspace(-0.5,1,3))
-    burnin_df = build_burnin_df(burnin_exp_id, platform, serialize_years*365)
     builder.add_sweep_definition(partial(update_serialize_parameters, df=burnin_df), range(len(burnin_df.index)))
-    add_event_recorder(task, event_list=["HappyBirthday", "Births"],
-                       start_day=1, end_day=sim_years*365,
-                       node_ids=[1], min_age_years=0,
-                       max_age_years=100)
-    add_malaria_summary_report(task, manifest, start_day=1,
-                               end_day=sim_years*365,
-                               reporting_interval=30,
-                               age_bins=[0.25, 5, 115],
-                               max_number_reports=20,
-                               filename_suffix='monthly',
-                               pretty_format=True)
-    # create experiment from builder
-    for year in range(sim_years):
-        start_day = 0 + 365 * year
-        sim_year = sim_start_year + year
-        add_malaria_summary_report(task, manifest, start_day=start_day,
-                                    end_day=365+year*365, reporting_interval=30,
-                                    age_bins=[0.25, 5, 115],
-                                    max_number_reports=13,
-                                    pretty_format=True,
-                                    filename_suffix=f'Monthly_U5_{sim_year}')
+
+    end_day = PICKUP_YEARS * 365
+    for n in pd.read_csv(NODES_FILE)["node_id"].tolist():
+        add_report_event_counter(task, manifest, start_day=1, end_day=end_day, node_ids=[n],
+                                 min_age_years=0, max_age_years=100,
+                                 event_trigger_list=["Births"],
+                                 filename_suffix="_".join(("node", str(n))))
+    add_malaria_summary_report(task, manifest, start_day=1, end_day=end_day, reporting_interval=30,
+                               age_bins=[0.25, 5, 115], max_number_reports=PICKUP_YEARS * 13,
+                               filename_suffix="monthly", pretty_format=True)
+    add_spatial_report_malaria_filtered(task, manifest, start_day=1, end_day=end_day, reporting_interval=1,
+                                        node_ids=None, min_age_years=0.25, max_age_years=100,
+                                        spatial_output_channels=["Population", "PCR_Parasite_Prevalence",
+                                                                 "New_Clinical_Cases"],
+                                        filename_suffix="all_ages")
+
     user = os.getlogin()
-    #experiment = Experiment.from_task(task, name=f'{user}_FE_example_sweep')
-    #experiment = Experiment.from_builder(builder, task, name='{user}_FE_example_sweep')
-    experiment = Experiment.from_builder(builder, task, name=f'{user} my_output')
-    # The last step is to call run() on the ExperimentManager to run the simulations.
-    experiment.run(wait_until_done=False, platform=platform)
+    experiment = Experiment.from_builder(builder, task, name=f"{user}_LAKE_pickup_test")
+    experiment.run(wait_until_done=True, platform=platform)
 
+    if not experiment.succeeded:
+        print(f"Experiment {experiment.uid} failed.\n")
+        show_failure(str(experiment.uid))
+        exit()
+    print(f"Experiment {experiment.uid} succeeded with {len(burnin_df)} simulations.")
+    print("Pickup ID:", experiment.uid)
 
-    # Check result
-    #if not experiment.succeeded:
-        #print(f"Experiment {experiment.uid} failed.\n")
-       # exit()
-   
-    #print(f"Experiment {experiment.uid} succeeded.")
-
-def update_serialize_parameters(simulation, df, x: int):
-
-   path = df["serialized_file_path"][x]
-   seed = int(df["Run_Number"][x])
-
-   simulation.task.set_parameter("Serialized_Population_Filenames", df["Serialized_Population_Filenames"][x])
-   simulation.task.set_parameter("Serialized_Population_Path", os.path.join(path, "output"))
-   simulation.task.set_parameter("Run_Number", seed) #match pickup simulation run number to burnin simulation
-
-   return {"Run_Number":seed}
 
 if __name__ == "__main__":
     import emod_malaria.bootstrap as dtk
-    import pathlib
-
     dtk.setup(pathlib.Path(manifest.eradication_path).parent)
     os.chmod(manifest.eradication_path, 0o755)
-
-    selected_platform = "SLURM_LOCAL"
-    general_sim(selected_platform)
+    general_sim("SLURM_LOCAL")

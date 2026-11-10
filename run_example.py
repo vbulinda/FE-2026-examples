@@ -1,78 +1,98 @@
-import pathlib
+"""
+Stage 3: run_inputs.py  (Lake Victoria, 8 counties)
+Adapted from your working run_example.py plus the tutorial's Week 2 inputs script
+and the Week 4 spatial build_demog(). One year, one seed, small population.
+
+Expects (under manifest.input_dir):
+  demographics/lake_nodes.csv                              node_id, lat, lon, pop  (ids 1-8)
+  climate/LAKE/2010001-2019365/dtk_15arcmin_*_daily.bin    + .json (IdReference = LAKE_VICTORIA)
+  vectors.csv   (optional; from fetch_vectors_lake.py)     used only for the species list
+"""
 import os
-from functools import \
-    partial 
- 
-#idmtools   
-from idmtools.assets import Asset, AssetCollection  
-from idmtools.builders import SimulationBuilder
+import pathlib
+import pandas as pd
+
 from idmtools.core.platform_factory import Platform
 from idmtools.entities.experiment import Experiment
 
-
-#emodpy
 from emodpy.emod_task import EMODTask
-import emod_api.config.default_from_schema_no_validation as dfs
 import emod_api.campaign as camp
 
-#emodpy-malaria
 import emodpy_malaria.demographics.MalariaDemographics as Demographics
+import emod_api.demographics.PreDefinedDistributions as Distributions
 
 import manifest
 
+# ---- settings for this stage -------------------------------------------------
+ID_REF       = "LAKE_VICTORIA"            # must equal IdReference inside the climate .json files
+SIM_YEARS    = 1
+RUN_NUMBER   = 1
+TEST_POP     = 1000                        # people per node for this test (real runs use lake_nodes.csv pop)
+CLIMATE_DIR  = os.path.join("climate", "LAKE", "2010001-2019365")   # path inside the simulation
+DEFAULT_SPECIES = ["gambiae", "arabiensis", "funestus"]
+NODES_FILE   = os.path.join(manifest.input_dir, "demographics", "lake_nodes.csv")
+VECTOR_FILE  = os.path.join(manifest.input_dir, "vectors.csv")
+
+
+def species_list():
+    """Species from vectors.csv if present, otherwise the three default Anopheles."""
+    if os.path.exists(VECTOR_FILE):
+        v = pd.read_csv(VECTOR_FILE)
+        s = [x for x in v["species"].unique()]
+        if s:
+            return s
+    return DEFAULT_SPECIES
 
 
 def set_param_fn(config):
-    """
-    This function is a callback that is passed to emod-api.config to set config parameters, including the malaria defaults.
-    """
     import emodpy_malaria.malaria_config as conf
     config = conf.set_team_defaults(config, manifest)
 
-    # Defaults to 0 (off) in the installed Eradication build's schema - turn on so
-    # InsetChart.json gets written to each simulation's output folder.
+    # Needed so InsetChart.json is written (off by default in the installed build)
     config.parameters.Enable_Default_Reporting = 1
 
+    config.parameters.Simulation_Duration = SIM_YEARS * 365
+    config.parameters.Run_Number = RUN_NUMBER
+
+    # Vectors (species are global in EMOD; node-level differences come later via habitat scaling)
+    conf.add_species(config, manifest, species_list())
+
+    # Climate from your fetched files
+    config.parameters.Climate_Model = "CLIMATE_BY_DATA"
+    config.parameters.Air_Temperature_Filename      = os.path.join(CLIMATE_DIR, "dtk_15arcmin_air_temperature_daily.bin")
+    config.parameters.Land_Temperature_Filename     = os.path.join(CLIMATE_DIR, "dtk_15arcmin_land_temperature_daily.bin")
+    config.parameters.Rainfall_Filename             = os.path.join(CLIMATE_DIR, "dtk_15arcmin_rainfall_daily.bin")
+    config.parameters.Relative_Humidity_Filename    = os.path.join(CLIMATE_DIR, "dtk_15arcmin_relative_humidity_daily.bin")
     return config
 
 
 def build_camp():
-    """
-    This function builds a campaign input file for the DTK using emod_api.
-    """
-
     camp.set_schema(manifest.schema_file)
-    
     return camp
 
 
 def build_demog():
-    """
-    This function builds a demographics input file for the DTK using emod_api.
-    """
+    """8 nodes from lake_nodes.csv, population scaled down to TEST_POP for the test."""
+    nodes = pd.read_csv(NODES_FILE)
+    assert list(nodes.columns[:4]) == ["node_id", "lat", "lon", "pop"], "lake_nodes.csv needs node_id,lat,lon,pop"
+    nodes["pop"] = TEST_POP
+    test_csv = "lake_nodes_test.csv"
+    nodes.to_csv(test_csv, index=False)
 
-    demog = Demographics.from_template_node(lat=1, lon=2, pop=10, name="Example_Site")
-
+    demog = Demographics.from_csv(input_file=test_csv, id_ref=ID_REF,
+                                  init_prev=0.01, include_biting_heterogeneity=True)
+    demog.SetEquilibriumVitalDynamics()
+    demog.SetAgeDistribution(Distributions.AgeDistribution_SSAfrica)
     return demog
 
 
 def general_sim(selected_platform):
-    """
-    This function is designed to be a parameterized version of the sequence of things we do 
-    every time we run an emod experiment. 
-    """
-
-    # Set platform and associated values, such as the maximum number of jobs to run at one time.
-    # All cluster-specific settings live in manifest.py so users only edit that file.
     platform = Platform(selected_platform, job_directory=manifest.job_directory,
-                            partition=manifest.partition, time=manifest.sim_time,
-                            modules=[manifest.singularity_module],
-                            max_running_jobs=manifest.max_running_jobs)
+                        partition=manifest.partition, time=manifest.sim_time,
+                        modules=[manifest.singularity_module],
+                        max_running_jobs=manifest.max_running_jobs)
 
-    # create EMODTask 
     print("Creating EMODTask (from files)...")
-
-    
     task = EMODTask.from_default2(
         config_path="config.json",
         eradication_path=manifest.eradication_path,
@@ -81,38 +101,25 @@ def general_sim(selected_platform):
         param_custom_cb=set_param_fn,
         ep4_custom_cb=None,
         demog_builder=build_demog,
-        plugin_report=None
+        plugin_report=None,
     )
-    
-    
-    # set the singularity image to be used when running this experiment
     task.set_sif(manifest.SIF_PATH, platform)
 
+    # climate folder goes in as an asset, same relative path the config uses
+    task.common_assets.add_directory(os.path.join(manifest.input_dir, "climate"), relative_path="climate")
 
-    # create experiment from builder
-    user = os.getlogin()
-    experiment = Experiment.from_task(task, name='')
-
-
-    # The last step is to call run() on the ExperimentManager to run the simulations.
+    experiment = Experiment.from_task(task, name="lake_inputs_test")
     experiment.run(wait_until_done=True, platform=platform)
 
-
-    # Check result
     if not experiment.succeeded:
         print(f"Experiment {experiment.uid} failed.\n")
         exit()
-
     print(f"Experiment {experiment.uid} succeeded.")
-
 
 
 if __name__ == "__main__":
     import emod_malaria.bootstrap as dtk
-    import pathlib
-
     dtk.setup(pathlib.Path(manifest.eradication_path).parent)
     os.chmod(manifest.eradication_path, 0o755)
 
-    selected_platform = "SLURM_LOCAL"
-    general_sim(selected_platform)
+    general_sim("SLURM_LOCAL")

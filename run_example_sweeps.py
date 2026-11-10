@@ -1,165 +1,241 @@
-import pathlib
 import os
-from functools import \
-    partial 
- 
-#idmtools   
-from idmtools.assets import Asset, AssetCollection  
-from idmtools.builders import SimulationBuilder
-from idmtools.core.platform_factory import Platform
-from idmtools.entities.experiment import Experiment
+import datetime
+import pandas as pd
+import numpy as np
+import sys
+import re
+import random
+from idmtools.entities import IAnalyzer
+from idmtools.entities.simulation import Simulation
+import manifest
+
+## For plotting
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+import matplotlib.dates as mdates
 
 
-#emodpy
-from emodpy.emod_task import EMODTask
-import emod_api.config.default_from_schema_no_validation as dfs
-import emod_api.campaign as camp
+class InsetChartAnalyzer(IAnalyzer):
 
-#emodpy-malaria
-import emodpy_malaria.demographics.MalariaDemographics as Demographics
+    @classmethod
+    def monthparser(self, x):
+        if x == 0:
+            return 12
+        else:
+            return datetime.datetime.strptime(str(x), '%j').month
 
-import emodpy_malaria.demographics.MalariaDemographics as Demographics
-import emod_api.demographics.PreDefinedDistributions as Distributions
+    def __init__(self, expt_name, sweep_variables=None, channels=None, working_dir=".", start_year=0):
+        super(InsetChartAnalyzer, self).__init__(working_dir=working_dir, filenames=["output/InsetChart.json"])
+        self.sweep_variables = sweep_variables or ["Run_Number"]
+        self.inset_channels = channels or ['Statistical Population', 'New Clinical Cases', 'Blood Smear Parasite Prevalence',
+                                           'Infectious Vectors']
+        self.expt_name = expt_name
+        self.start_year = start_year
 
-import manifest 
-from emodpy_malaria.reporters.builtin import *
+    def map(self, data, simulation: Simulation):
+        simdata = pd.DataFrame({x: data[self.filenames[0]]['Channels'][x]['Data'] for x in self.inset_channels})
+        simdata['Time'] = simdata.index
+        simdata['Day'] = simdata['Time'] % 365
+        simdata['Year'] = simdata['Time'].apply(lambda x: int(x / 365) + self.start_year)
+        simdata['date'] = simdata.apply(
+            lambda x: datetime.date(int(x['Year']), 1, 1) + datetime.timedelta(int(x['Day']) - 1), axis=1)
 
-sim_years = 1
-num_seeds = 5
+        for sweep_var in self.sweep_variables:
+            if sweep_var in simulation.tags.keys():
+                simdata[sweep_var] = simulation.tags[sweep_var]
+            elif sweep_var == 'Run_Number':
+                simdata[sweep_var] = 0
+        return simdata
 
-def set_param_fn(config):
-    """
-    This function is a callback that is passed to emod-api.config to set config parameters, including the malaria defaults.
-    """
-    import emodpy_malaria.malaria_config as conf
-    config = conf.set_team_defaults(config, manifest)
-    config.parameters.Climate_Model = "CLIMATE_BY_DATA"
+    def reduce(self, all_data):
 
-    # Defaults to 0 (off) in the installed Eradication build's schema - turn on so
-    # InsetChart.json gets written to each simulation's output folder.
-    config.parameters.Enable_Default_Reporting = 1
-    
-     ## existing contents
-    config.parameters.Air_Temperature_Filename = os.path.join('climate', 'air_temperature.bin')
-    config.parameters.Land_Temperature_Filename = os.path.join('climate', 'land_temperature.bin')
-    config.parameters.Rainfall_Filename = os.path.join('climate', 'rainfall.bin')
-    config.parameters.Relative_Humidity_Filename = os.path.join('climate', 'relative_humidity.bin')
-        
-    conf.add_species(config, manifest, ["gambiae", "arabiensis", "funestus"])
+        selected = [data for sim, data in all_data.items()]
+        if len(selected) == 0:
+            print("No data have been returned... Exiting...")
+            return
 
-    config.parameters.Simulation_Duration = sim_years*365
-    config.parameters.Run_Number = 0
+        if not os.path.exists(os.path.join(self.working_dir, self.expt_name)):
+            os.mkdir(os.path.join(self.working_dir, self.expt_name))
 
-    return config
-def set_param(simulation, param, value):
-    """
-    Set specific parameter value
-    Args:
-        simulation: idmtools Simulation
-        param: parameter
-        value: new value
-    Returns:
-        dict
-    """
-    return simulation.task.set_parameter(param, value)
+        adf = pd.concat(selected).reset_index(drop=True)
+        adf.to_csv(os.path.join(self.working_dir, self.expt_name, 'All_Age_InsetChart.csv'), index=False)
 
 
-def build_camp():
-    """
-    This function builds a campaign input file for the DTK using emod_api.
-    """
+class MonthlyPfPRAnalyzer(IAnalyzer):
 
-    camp.set_schema(manifest.schema_file)
-    
-    return camp
+    def __init__(self, expt_name, sweep_variables=None, working_dir='./', start_year=0,
+                 burnin=None, filter_exists=False):
 
+        super(MonthlyPfPRAnalyzer, self).__init__(working_dir=working_dir,
+                                                   filenames=["output/MalariaSummaryReport_monthly.json"]
+                                                   )
 
-def build_demog():
-    """
-    This function builds a demographics input file for the DTK using emod_api.
-    """
+        self.sweep_variables = sweep_variables or ["Run_Number"]
+        self.expt_name = expt_name
+        self.start_year = start_year
+        self.burnin = burnin
+        self.filter_exists = filter_exists
 
-    demog = Demographics.from_template_node(lat=10.90, lon=-1.09, pop=1000, name="Navrongo")
-    demog.SetEquilibriumVitalDynamics()
-    age_distribution = Distributions.AgeDistribution_SSAfrica
-    demog.SetAgeDistribution(age_distribution)
-    return demog
+    def filter(self, simulation: Simulation):
+        if self.filter_exists:
+            file = os.path.join(simulation.get_path(), self.filenames[0])
+            return os.path.exists(file)
+        else:
+            return True
 
+    def map(self, data, simulation: Simulation):
+        adf = pd.DataFrame()
+        fname = self.filenames[0]
+        age_bins = data[self.filenames[0]]['Metadata']['Age Bins']
 
-def general_sim(selected_platform):
-    """
-    This function is designed to be a parameterized version of the sequence of things we do 
-    every time we run an emod experiment. 
-    """
+        for age in range(len(age_bins)):
+            d = data[fname]['DataByTimeAndAgeBins']['PfPR by Age Bin'][:-1]
+            pfpr = [x[age] for x in d]
 
-    # Set platform and associated values, such as the maximum number of jobs to run at one time.
-    # All cluster-specific settings live in manifest.py so users only edit that file.
-    platform = Platform(selected_platform, job_directory=manifest.job_directory,
-                            partition=manifest.partition, time=manifest.sim_time,
-                            modules=[manifest.singularity_module],
-                            max_running_jobs=manifest.max_running_jobs)
+            d = data[fname]['DataByTimeAndAgeBins']['Annual Clinical Incidence by Age Bin'][:-1]
+            clinical_cases = [x[age] for x in d]
 
-    # create EMODTask 
-    print("Creating EMODTask (from files)...")
-   
-    
-    task = EMODTask.from_default2(
-        config_path="config.json",
-        eradication_path=manifest.eradication_path,
-        campaign_builder=build_camp,
-        schema_path=manifest.schema_file,
-        param_custom_cb=set_param_fn,
-        ep4_custom_cb=None,
-        demog_builder=build_demog,
-        plugin_report=None
-    )
-    
-    
-    # set the singularity image to be used when running this experiment
-    task.set_sif(manifest.SIF_PATH, platform)
-    #task.common_assets.add_directory(os.path.join('/shared/home/bulinda/FE-2026-examples'), relative_path='climate')
-    
-    # add weather directory as an asset
-    task.common_assets.add_directory(os.path.join(manifest.input_dir, "emod_weather_upper_east/"), relative_path='climate')
-    builder = SimulationBuilder()
-    builder.add_sweep_definition(partial(set_param, param='Run_Number'), range(num_seeds))
-    add_event_recorder(task, event_list=["HappyBirthday", "Births"],
-                       start_day=1, end_day=sim_years*365, 
-                       node_ids=[1], min_age_years=0,
-                       max_age_years=100)
-                       
-    add_malaria_summary_report(task, manifest, start_day=1, 
-                               end_day=sim_years*365, 
-                               reporting_interval=30,
-                               age_bins=[0.25, 5, 115],
-                               max_number_reports=20,
-                               filename_suffix='monthly',
-                               pretty_format=True)             
+            d = data[fname]['DataByTimeAndAgeBins']['Annual Severe Incidence by Age Bin'][:-1]
+            severe_cases = [x[age] for x in d]
 
-    # create experiment from builder
-    user = os.getlogin()
-    experiment = Experiment.from_builder(builder, task, name=f'{user}_FE_example_sweep')
-    
+            d = data[fname]['DataByTimeAndAgeBins']['New Infections by Age Bin'][:-1]
+            new_infections = [x[age] for x in d]
 
-    # The last step is to call run() on the ExperimentManager to run the simulations.
-    experiment.run(wait_until_done=True, platform=platform)
+            d = data[fname]['DataByTimeAndAgeBins']['Annual Mild Anemia by Age Bin'][:-1]
+            mild_anemia = [x[age] for x in d]
 
+            d = data[fname]['DataByTimeAndAgeBins']['Pf Gametocyte Prevalence by Age Bin'][:-1]
+            gamete_prev = [x[age] for x in d]
 
-    # Check result
-    if not experiment.succeeded:
-        print(f"Experiment {experiment.uid} failed.\n")
-        exit()
+            d = data[fname]['DataByTimeAndAgeBins']['Mean Log Parasite Density by Age Bin'][:-1]
+            dens = [x[age] for x in d]
 
-    print(f"Experiment {experiment.uid} succeeded.")
+            d = data[fname]['DataByTimeAndAgeBins']['Average Population by Age Bin'][:-1]
+            pop = [x[age] for x in d]
 
+            simdata = pd.DataFrame({'month': range(1, len(pfpr)+1),
+                                    'PfPR': pfpr,
+                                    'Cases': clinical_cases,
+                                    'Severe_cases': severe_cases,
+                                    'New_infections': new_infections,
+                                    'Anemia': mild_anemia,
+                                    'Mean_density': dens,
+                                    'Gametocyte_prevalence': gamete_prev,
+                                    'Pop': pop})
+
+            simdata['agebin'] = age_bins[age]
+
+            adf = pd.concat([adf, simdata])
+
+        for sweep_var in self.sweep_variables:
+            if sweep_var in simulation.tags.keys():
+                try:
+                    adf[sweep_var] = simulation.tags[sweep_var]
+                except:
+                    adf[sweep_var] = '-'.join([str(x) for x in simulation.tags[sweep_var]])
+
+        adf['Year'] = None
+        adf['Year'] = np.floor((adf['month']-1)/12)+self.start_year
+
+        return adf
+
+    def reduce(self, all_data):
+
+        selected = [data for sim, data in all_data.items()]
+        print(len(selected))
+        if len(selected) == 0:
+            print("\nWarning: No data have been returned... Exiting...")
+            return
+
+        if not os.path.exists(os.path.join(self.working_dir, self.expt_name)):
+            os.mkdir(os.path.join(self.working_dir, self.expt_name))
+
+        print(f'\nSaving outputs to: {os.path.join(self.working_dir, self.expt_name)}')
+
+        adf = pd.concat(selected).reset_index(drop=True)
+        adf.to_csv((os.path.join(self.working_dir, self.expt_name, 'PfPR_ClinicalIncidence_monthly.csv')),
+                   index=False)
 
 
 if __name__ == "__main__":
-    import emod_malaria.bootstrap as dtk
-    import pathlib
+    # Lake Victoria seed sweep. Run:  python analyzer_W2.py
+    # (analyzer_spatial.py must be in this folder)
+    from idmtools.analysis.analyze_manager import AnalyzeManager
+    from idmtools.core import ItemType
+    from idmtools.core.platform_factory import Platform
+    from analyzer_spatial import SpatialAnalyzer
+    import glob
 
-    dtk.setup(pathlib.Path(manifest.eradication_path).parent)
-    os.chmod(manifest.eradication_path, 0o755)
+    EXP_ID = "63808b9e-03a6-4158-a1d2-f40d8cc47f67"     # your Lake Victoria sweep
+    NAME = "lake_sweep_test"
+    START_YEAR = 2010
 
-    selected_platform = "SLURM_LOCAL"
-    general_sim(selected_platform)
+    wdir = os.path.join(manifest.job_directory, "my_outputs", NAME)
+    os.makedirs(wdir, exist_ok=True)
+    sweep = ["Run_Number"]
+
+    # ---- look at what the simulation actually wrote -----------------------------
+    spatial_channels = ["Population", "PCR_Parasite_Prevalence", "New_Clinical_Cases"]
+    have_spatial = False
+    exp_dirs = [d for d in glob.glob(os.path.join(manifest.job_directory, "**", EXP_ID), recursive=True) if os.path.isdir(d)]
+    print("Experiment folder(s):", exp_dirs)
+    for ed in exp_dirs[:1]:
+        outs = glob.glob(os.path.join(ed, "*", "output"))
+        if outs:
+            files = sorted(os.listdir(outs[0]))
+            print("Output files of first simulation:\n ", "\n  ".join(files))
+            have_spatial = all(os.path.exists(os.path.join(outs[0], f"SpatialReportMalariaFiltered_all_ages_{c}.bin")) for c in spatial_channels)
+    print("Spatial files present:", have_spatial)
+    channels = ["Statistical Population", "True Prevalence", "New Clinical Cases",
+                "Infectious Vectors", "Rainfall", "Air Temperature"]
+
+    with Platform("SLURM_LOCAL", job_directory=manifest.job_directory) as platform:
+        analyzers = [
+            InsetChartAnalyzer(expt_name=NAME, channels=channels, sweep_variables=sweep,
+                               start_year=START_YEAR, working_dir=wdir),
+            MonthlyPfPRAnalyzer(expt_name=NAME, sweep_variables=sweep,
+                                start_year=START_YEAR, working_dir=wdir),
+        ]
+        if have_spatial:
+            analyzers.append(SpatialAnalyzer(dir_name=NAME, f_base="SpatialReportMalariaFiltered", f_suffix="all_ages",
+                            exp_id=EXP_ID, spatial_channels=spatial_channels,
+                            sweep_variables=sweep, working_dir=wdir))
+        else:
+            print("\nNo spatial files in this experiment: skipping SpatialAnalyzer.")
+        AnalyzeManager(configuration={}, ids=[(EXP_ID, ItemType.EXPERIMENT)],
+                       analyzers=analyzers, partial_analyze_ok=True).analyze()
+
+    if have_spatial:
+        sp = pd.read_csv(os.path.join(wdir, "SpatialReportMalariaFiltered_all_ages.csv"))
+        print("\nSpatial rows:", len(sp), " nodes:", sorted(sp["node"].unique()))
+        print(sp.groupby("node")[["Population", "PCR_Parasite_Prevalence", "New_Clinical_Cases"]].mean().round(3))
+
+        # ---- how much do the seeds differ? ---------------------------------------
+        last = sp[sp["time"] >= sp["time"].max() - 180]            # last 6 months of the year
+        seed_tab = last.groupby(["node", "Run_Number"])[["PCR_Parasite_Prevalence", "New_Clinical_Cases"]].mean().round(4)
+        piv = seed_tab["PCR_Parasite_Prevalence"].unstack("Run_Number")
+        piv["mean"] = piv.mean(axis=1)
+        piv["sd"] = piv.drop(columns="mean").std(axis=1)
+        print("\nPCR prevalence by county and seed (mean of last 6 months):")
+        print(piv.round(3))
+        seed_tab.to_csv(os.path.join(wdir, "seed_noise_by_county.csv"))
+        try:
+            import matplotlib
+            matplotlib.use("Agg")
+            import matplotlib.pyplot as plt
+            fig, axs = plt.subplots(2, 4, figsize=(14, 6), sharex=True, sharey=True)
+            for ax, (node, g) in zip(axs.ravel(), sp.groupby("node")):
+                for run, gg in g.groupby("Run_Number"):
+                    ax.plot(gg["time"], gg["PCR_Parasite_Prevalence"].rolling(14, min_periods=1).mean(), lw=1, label=f"seed {run}")
+                ax.set_title(f"node {node}")
+            axs[0, 0].legend(fontsize=7)
+            fig.supxlabel("day")
+            fig.supylabel("PCR prevalence (14-day mean)")
+            fig.tight_layout()
+            p = os.path.join(wdir, "seed_noise_prevalence.png")
+            fig.savefig(p, dpi=120)
+            print("Plot:", p)
+        except Exception as e:
+            print("(plot skipped:", e, ")")
+
+    print("\nFiles in", wdir, ":", os.listdir(wdir))

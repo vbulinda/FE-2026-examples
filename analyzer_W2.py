@@ -55,7 +55,7 @@ class InsetChartAnalyzer(IAnalyzer):
             return
 
         if not os.path.exists(os.path.join(self.working_dir, self.expt_name)):
-            os.mkdir(os.path.join(self.working_dir, self.expt_name))
+            os.makedirs(os.path.join(self.working_dir, self.expt_name), exist_ok=True)
 
         adf = pd.concat(selected).reset_index(drop=True)
         adf.to_csv(os.path.join(self.working_dir, self.expt_name, 'All_Age_InsetChart.csv'), index=False)
@@ -148,7 +148,7 @@ class MonthlyPfPRAnalyzer(IAnalyzer):
             return
 
         if not os.path.exists(os.path.join(self.working_dir, self.expt_name)):
-            os.mkdir(os.path.join(self.working_dir, self.expt_name))
+            os.makedirs(os.path.join(self.working_dir, self.expt_name), exist_ok=True)
 
         print(f'\nSaving outputs to: {os.path.join(self.working_dir, self.expt_name)}')
 
@@ -164,14 +164,13 @@ if __name__ == "__main__":
 
     
     expts = {
-        "bulinda_FE_example_sweep": "e932f2be-74e2-4be6-9e28-5e973e6318ff"
         #'week2_weather' : '2c090358-cb7b-44e5-a2fd-842a6c23a5b7'
-        #'week2_outputs' : '142fd52a-981d-468c-a3cf-2900f0290490'
+        'lake_sweep_test' : '63808b9e-03a6-4158-a1d2-f40d8cc47f67'
     }
     
 
     jdir = manifest.job_directory
-    wdir = os.path.join(jdir, 'output')
+    wdir = os.path.join(jdir, 'my_outputs')
     
     if not os.path.exists(wdir):
         os.mkdir(wdir)
@@ -226,4 +225,3 @@ if __name__ == "__main__":
     if len(sweep_variables) > 0:
         axes[-1].legend(title=sweep_variables)
     fig1.savefig(os.path.join(wdir, expt_name, 'InsetChart.png'))
-    

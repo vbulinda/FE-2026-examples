@@ -1,268 +1,93 @@
-import os
-import datetime
+"""
+analyzer_pickup.py  -  analysis of the Lake Victoria pickup test (Stage 9)
+
+Run from FE-2026-examples (needs analyzer_W2.py and analyzer_spatial.py there; imports only the classes):
+    python analyzer_pickup.py
+
+The pickup has one simulation per larval-habitat value (xTLH), so results are grouped by xTLH.
+Writes to <job_directory>/my_outputs/lake_pickup_test/ :
+  All_Age_InsetChart.csv, PfPR_ClinicalIncidence_monthly.csv, SpatialReportMalariaFiltered_all_ages.csv
+  pickup_by_xTLH_county.csv     per county and xTLH: prevalence and clinical incidence, last 12 months
+  pickup_prevalence_by_xTLH.png prevalence over time, one panel per county, one line per xTLH
+"""
+import os, glob
 import pandas as pd
 import numpy as np
-import sys
-import re
-import random
-from idmtools.entities import IAnalyzer	
-from idmtools.entities.simulation import Simulation
+from idmtools.analysis.analyze_manager import AnalyzeManager
+from idmtools.core import ItemType
+from idmtools.core.platform_factory import Platform
+
 import manifest
+from analyzer_W2 import InsetChartAnalyzer, MonthlyPfPRAnalyzer
+from analyzer_spatial import SpatialAnalyzer
 
-## For plotting
-import matplotlib.pyplot as plt
-import matplotlib as mpl
-import matplotlib.dates as mdates
+EXP_ID = "098beed9-c5db-4636-a7ea-8e218fe0cee5"     # pickup experiment
+NAME = "lake_pickup_test"
+START_YEAR = 2010
+NODE_NAMES = {1: "Kisumu", 2: "Siaya", 3: "Migori", 4: "Homa Bay",
+              5: "Kakamega", 6: "Busia", 7: "Bungoma", 8: "Vihiga"}
 
+wdir = os.path.join(manifest.job_directory, "my_outputs", NAME)
+os.makedirs(wdir, exist_ok=True)
+sweep = ["Run_Number", "xTLH"]
+channels = ["Statistical Population", "True Prevalence", "New Clinical Cases",
+            "Infectious Vectors", "Rainfall", "Air Temperature"]
+spatial_channels = ["Population", "PCR_Parasite_Prevalence", "New_Clinical_Cases"]
 
-class InsetChartAnalyzer(IAnalyzer):
+# does the pickup contain the spatial files?
+have_spatial = False
+for ed in [d for d in glob.glob(os.path.join(manifest.job_directory, "**", "*" + EXP_ID + "*"), recursive=True) if os.path.isdir(d)][:1]:
+    outs = glob.glob(os.path.join(ed, "*", "output"))
+    if outs:
+        have_spatial = all(os.path.exists(os.path.join(outs[0], f"SpatialReportMalariaFiltered_all_ages_{c}.bin")) for c in spatial_channels)
+        print("Output files of first simulation:", sorted(os.listdir(outs[0]))[:12], "...")
+print("Spatial files present:", have_spatial)
 
-    @classmethod
-    def monthparser(self, x):
-        if x == 0:
-            return 12
-        else:
-            return datetime.datetime.strptime(str(x), '%j').month
+with Platform("SLURM_LOCAL", job_directory=manifest.job_directory) as platform:
+    analyzers = [InsetChartAnalyzer(expt_name=NAME, channels=channels, sweep_variables=sweep,
+                                    start_year=START_YEAR, working_dir=wdir),
+                 MonthlyPfPRAnalyzer(expt_name=NAME, sweep_variables=sweep,
+                                     start_year=START_YEAR, working_dir=wdir)]
+    if have_spatial:
+        analyzers.append(SpatialAnalyzer(dir_name=NAME, f_base="SpatialReportMalariaFiltered", f_suffix="all_ages",
+                                         exp_id=EXP_ID, spatial_channels=spatial_channels,
+                                         sweep_variables=sweep, working_dir=wdir))
+    AnalyzeManager(configuration={}, ids=[(EXP_ID, ItemType.EXPERIMENT)],
+                   analyzers=analyzers, partial_analyze_ok=True).analyze()
 
-    def __init__(self, expt_name, sweep_variables=None, channels=None, working_dir=".", start_year=0):
-        super(InsetChartAnalyzer, self).__init__(working_dir=working_dir, filenames=["output/InsetChart.json"])
-        self.sweep_variables = sweep_variables or ["Run_Number"]
-        self.inset_channels = channels or ['Statistical Population', 'New Clinical Cases', 'Blood Smear Parasite Prevalence',
-                                           'Infectious Vectors']
-        self.expt_name = expt_name
-        self.start_year = start_year
+if have_spatial:
+    sp = pd.read_csv(os.path.join(wdir, "SpatialReportMalariaFiltered_all_ages.csv"))
+    sp["xTLH"] = sp["xTLH"].astype(float).round(3)
+    tmax = sp["time"].max()
+    last = sp[sp["time"] > tmax - 365]                      # last 12 months of the pickup
+    g = last.groupby(["xTLH", "node"])
+    tab = g.agg(pcr_prevalence=("PCR_Parasite_Prevalence", "mean"),
+                population=("Population", "mean"),
+                cases_year=("New_Clinical_Cases", "sum")).reset_index()
+    tab["clinical_incidence_per_1000_year"] = tab["cases_year"] / tab["population"] * 1000
+    tab["county"] = tab["node"].map(NODE_NAMES)
+    tab = tab[["xTLH", "node", "county", "pcr_prevalence", "clinical_incidence_per_1000_year", "population"]].round(4)
+    tab.to_csv(os.path.join(wdir, "pickup_by_xTLH_county.csv"), index=False)
 
-    def map(self, data, simulation: Simulation):
-        simdata = pd.DataFrame({x: data[self.filenames[0]]['Channels'][x]['Data'] for x in self.inset_channels})
-        simdata['Time'] = simdata.index
-        simdata['Day'] = simdata['Time'] % 365
-        simdata['Year'] = simdata['Time'].apply(lambda x: int(x / 365) + self.start_year)
-        simdata['date'] = simdata.apply(
-            lambda x: datetime.date(int(x['Year']), 1, 1) + datetime.timedelta(int(x['Day']) - 1), axis=1)
+    print("\nMean PCR prevalence, last 12 months, by county (rows) and xTLH (columns):")
+    print(tab.pivot(index="county", columns="xTLH", values="pcr_prevalence").round(3))
+    print("\nClinical cases per 1,000 people per year, last 12 months:")
+    print(tab.pivot(index="county", columns="xTLH", values="clinical_incidence_per_1000_year").round(0))
+    print("\nAll counties together (mean of counties):")
+    print(tab.groupby("xTLH")[["pcr_prevalence", "clinical_incidence_per_1000_year"]].mean().round(3))
 
-        for sweep_var in self.sweep_variables:
-            if sweep_var in simulation.tags.keys():
-                simdata[sweep_var] = simulation.tags[sweep_var]
-            elif sweep_var == 'Run_Number' :
-                simdata[sweep_var] = 0
-        return simdata
-
-    def reduce(self, all_data):
-
-        selected = [data for sim, data in all_data.items()]
-        if len(selected) == 0:
-            print("No data have been returned... Exiting...")
-            return
-
-        if not os.path.exists(os.path.join(self.working_dir, self.expt_name)):
-            os.mkdir(os.path.join(self.working_dir, self.expt_name))
-
-        adf = pd.concat(selected).reset_index(drop=True)
-        adf.to_csv(os.path.join(self.working_dir, self.expt_name, 'All_Age_InsetChart.csv'), index=False)
-
-class MonthlyPfPRAnalyzer(IAnalyzer):
-
-    def __init__(self, expt_name, sweep_variables=None, working_dir='./', start_year=0,
-                 burnin=None, filter_exists=False):
-
-        super(MonthlyPfPRAnalyzer, self).__init__(working_dir=working_dir,
-                                                   filenames=["output/MalariaSummaryReport_monthly.json"]
-                                                   )
-     
-        self.sweep_variables = sweep_variables or ["Run_Number"]
-        self.expt_name = expt_name
-        self.start_year = start_year
-        self.burnin = burnin
-        self.filter_exists = filter_exists
-
-    def filter(self, simulation: Simulation):
-        if self.filter_exists:
-            file = os.path.join(simulation.get_path(), self.filenames[0])
-            return os.path.exists(file)
-        else:
-            return True
-
-    def map(self, data, simulation: Simulation):
-        adf = pd.DataFrame()
-        fname = self.filenames[0]
-        age_bins = data[self.filenames[0]]['Metadata']['Age Bins']
-      
-        for age in range(len(age_bins)):
-            d = data[fname]['DataByTimeAndAgeBins']['PfPR by Age Bin'][:-1]
-            pfpr = [x[age] for x in d]
-          
-            d = data[fname]['DataByTimeAndAgeBins']['Annual Clinical Incidence by Age Bin'][:-1]
-            clinical_cases = [x[age] for x in d]
-         
-            d = data[fname]['DataByTimeAndAgeBins']['Annual Severe Incidence by Age Bin'][:-1]
-            severe_cases = [x[age] for x in d]
-
-            d = data[fname]['DataByTimeAndAgeBins']['New Infections by Age Bin'][:-1]
-            new_infections = [x[age] for x in d]
-
-            d = data[fname]['DataByTimeAndAgeBins']['Annual Mild Anemia by Age Bin'][:-1]
-            mild_anemia = [x[age] for x in d]
-
-            d = data[fname]['DataByTimeAndAgeBins']['Pf Gametocyte Prevalence by Age Bin'][:-1]
-            gamete_prev = [x[age] for x in d]
-            
-            d = data[fname]['DataByTimeAndAgeBins']['Mean Log Parasite Density by Age Bin'][:-1]
-            dens = [x[age] for x in d]            
-
-            d = data[fname]['DataByTimeAndAgeBins']['Average Population by Age Bin'][:-1]
-            pop = [x[age] for x in d]
-
-            simdata = pd.DataFrame({'month': range(1, len(pfpr)+1),
-                                    'PfPR': pfpr,
-                                    'Cases': clinical_cases,
-                                    'Severe_cases': severe_cases,
-                                    'New_infections': new_infections,
-                                    'Anemia': mild_anemia,
-                                    'Mean_density': dens,
-                                    'Gametocyte_prevalence': gamete_prev,
-                                    'Pop': pop})
-                       
-            simdata['agebin'] = age_bins[age]
-
-
-            adf = pd.concat([adf, simdata])
-
-        for sweep_var in self.sweep_variables:
-            if sweep_var in simulation.tags.keys():
-                try:
-                    adf[sweep_var] = simulation.tags[sweep_var]
-                except:
-                    adf[sweep_var] = '-'.join([str(x) for x in simulation.tags[sweep_var]])
-        
-        adf['Year'] = None
-        adf['Year'] = np.floor((adf['month']-1)/12)+self.start_year
-        
-        return adf
-
-    def reduce(self, all_data):
-
-        selected = [data for sim, data in all_data.items()]
-        print(len(selected))
-        if len(selected) == 0:
-            print("\nWarning: No data have been returned... Exiting...")
-            return
-
-        if not os.path.exists(os.path.join(self.working_dir, self.expt_name)):
-            os.mkdir(os.path.join(self.working_dir, self.expt_name))
-
-        print(f'\nSaving outputs to: {os.path.join(self.working_dir, self.expt_name)}')
-
-        adf = pd.concat(selected).reset_index(drop=True)
-        adf.to_csv((os.path.join(self.working_dir, self.expt_name, 'PfPR_ClinicalIncidence_monthly.csv')),
-                   index=False)
-        
-if __name__ == "__main__":
-
-    from idmtools.analysis.analyze_manager import AnalyzeManager
-    from idmtools.core import ItemType
-    from idmtools.core.platform_factory import Platform
-
-    
-    expts = {
-        "output": "ae87bd07-1176-4bf8-81a0-a75cfd0cfec4"
-        #'week2_weather' : '2c090358-cb7b-44e5-a2fd-842a6c23a5b7'
-        #'week2_outputs' : '142fd52a-981d-468c-a3cf-2900f0290490'
-    }
-    
-
-    jdir = manifest.job_directory
-    wdir = os.path.join(jdir, 'output')
-    
-    if not os.path.exists(wdir):
-        os.mkdir(wdir)
-    
-    sweep_variables = ['Run_Number'] 
-    
-    serialize_years = 10  # Same as in run_example_burnin.py
-    step = 'burnin'
-    # set desired InsetChart channels to analyze and plot
-#    channels_inset_chart = ['Statistical Population', 'True Prevalence', 'New Clinical Cases','Infectious Vectors','Rainfall','Air Temperature']
-    channels_inset_chart = ['Statistical Population', 'New Clinical Cases', 'Adult Vectors', 'Infected' , 'Air Temperature' , 'Rainfall']
-    sweep_variables = ['Run_Number']
-    if step == 'pickup':
-        sweep_variables = ['Run_Number'] 
-
-    
-#    with Platform('SLURM_LOCAL',job_directory=jdir) as platform:
-#
-#        for expt_name, exp_id in expts.items():
-#          
-#            analyzer = [InsetChartAnalyzer(expt_name=expt_name,
-#                                      channels=channels_inset_chart,
-#                                      sweep_variables=sweep_variables,
-#                                      start_year = 2023,
-#                                      working_dir=wdir),
-#                        MonthlyPfPRAnalyzer(expt_name=expt_name,
-#                                      sweep_variables=sweep_variables,
-#                                      start_year=2023,
-#                                      working_dir=wdir)]
-#            
-#            # Create AnalyzerManager with required parameters
-#            manager = AnalyzeManager(configuration={}, ids=[(exp_id, ItemType.EXPERIMENT)],
-#                                     analyzers=analyzer, partial_analyze_ok=True)
-#            # Run analyze
-#            manager.analyze()
-#            
-#            
-#   
-    with Platform('SLURM_LOCAL',job_directory=jdir) as platform:
-
-        for expt_name, exp_id in expts.items():
-            analyzers_burnin = [InsetChartAnalyzer(expt_name=expt_name,
-                                    channels=channels_inset_chart,
-                                    start_year=2000 - serialize_years,
-                                    sweep_variables=sweep_variables,
-                                    working_dir=wdir),
-                                ]
-
-#            analyzers_pickup = [InsetChartAnalyzer(expt_name=expt_name,
-#                                    channels=channels_inset_chart,
-#                                    start_year=2023,
-#                                    sweep_variables=sweep_variables,
-#                                    working_dir=wdir),
-#                                MonthlyPfPRAnalyzer(expt_name=expt_name,
-#                                    start_year=2023,
-#                                    sweep_variables=sweep_variables,
-#                                    working_dir=wdir)
-#                                ]
-
-        if step == 'burnin':
-            am = AnalyzeManager(configuration={}, ids=[(exp_id, ItemType.EXPERIMENT)],
-                            analyzers=analyzers_burnin, partial_analyze_ok=True)
-            am.analyze()
-
-        elif step == 'pickup':
-            am = AnalyzeManager(configuration={}, ids=[(exp_id, ItemType.EXPERIMENT)],
-                            analyzers=analyzers_pickup, partial_analyze_ok=True)
-            am.analyze()
-    
-        else:
-            print('Please define step, options are burnin or pickup')
-    # read in analyzed InsetChart data
-    expt_name=list(expts.keys())[0]
-    df = pd.read_csv(os.path.join(wdir, expt_name, 'All_Age_InsetChart.csv'))
-    df['date'] = pd.to_datetime(df['date'])
-    df = df.groupby(['date'] + sweep_variables)[channels_inset_chart].agg(np.mean).reset_index()
-
-    # make InsetChart plot
-    fig1 = plt.figure('InsetChart', figsize=(12, 6))
-    fig1.subplots_adjust(hspace=0.5, left=0.08, right=0.97)
-    fig1.suptitle(f'Analyzer: InsetChartAnalyzer')
-    axes = [fig1.add_subplot(2, 3, x + 1) for x in range(6)]
-    for ch, channel in enumerate(channels_inset_chart):
-        ax = axes[ch]
-        for p, pdf in df.groupby(sweep_variables):
-            ax.plot(pdf['date'], pdf[channel], '-', linewidth=0.8, label=p)
-        ax.set_title(channel)
-        ax.set_ylabel(channel)
-        ax.xaxis.set_major_locator(mdates.MonthLocator(interval=12))
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
-    if len(sweep_variables) > 0:
-        axes[-1].legend(title=sweep_variables)
-    fig1.savefig(os.path.join(wdir, expt_name, 'InsetChart.png'))
-    
+    try:
+        import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
+        fig, axs = plt.subplots(2, 4, figsize=(14, 6), sharex=True, sharey=True)
+        for ax, (node, gg) in zip(axs.ravel(), sp.groupby("node")):
+            for x, g2 in gg.groupby("xTLH"):
+                ax.plot(g2["time"] / 365, g2["PCR_Parasite_Prevalence"].rolling(14, min_periods=1).mean(),
+                        lw=1, label=f"xTLH {x}")
+            ax.set_title(NODE_NAMES.get(node, node))
+        axs[0, 0].legend(fontsize=7)
+        fig.supxlabel("years since pickup start"); fig.supylabel("PCR prevalence (14-day mean)")
+        fig.tight_layout(); p = os.path.join(wdir, "pickup_prevalence_by_xTLH.png"); fig.savefig(p, dpi=120)
+        print("\nPlot:", p)
+    except Exception as e:
+        print("(plot skipped:", e, ")")
+print("\nFiles in", wdir, ":", sorted(os.listdir(wdir)))

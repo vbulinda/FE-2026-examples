@@ -1,0 +1,43 @@
+Output files of one simulation: ['InsetChart.json', 'MalariaSummaryReport_monthly.json', 'ReportEventCounter_node_1.json', 'ReportEventCounter_node_2.json', 'ReportEventCounter_node_3.json', 'ReportEventCounter_node_4.json', 'ReportEventCounter_node_5.json', 'ReportEventCounter_node_6.json', 'ReportEventCounter_node_7.json', 'ReportEventCounter_node_8.json', 'SpatialReportMalariaFiltered_all_ages_New_Clinical_Cases.bin', 'SpatialReportMalariaFiltered_all_ages_PCR_Parasite_Prevalence.bin', 'SpatialReportMalariaFiltered_all_ages_Population.bin', 'SpatialReportMalariaFiltered_children_New_Clinical_Cases.bin']
+Spatial report sets found: ['all_ages', 'children']
+
+Initializing SlurmPlatform with:
+{
+   "job_directory": "/shared/home/bulinda/FE-2026-examples/experiments"
+}
+
+=== analysing the 'children' report ===
+analyzer will load: ['output/SpatialReportMalariaFiltered_all_ages_Population.bin', 'output/SpatialReportMalariaFiltered_all_ages_PCR_Parasite_Prevalence.bin', 'output/SpatialReportMalariaFiltered_all_ages_New_Clinical_Cases.bin']
+-> correcting the file list to: ['output/SpatialReportMalariaFiltered_children_Population.bin', 'output/SpatialReportMalariaFiltered_children_PCR_Parasite_Prevalence.bin', 'output/SpatialReportMalariaFiltered_children_New_Clinical_Cases.bin']
+Analyze Manager
+ | 28 item(s) selected for analysis
+ | partial_analyze_ok is True, max_items is None, and 0 item(s) are being ignored
+ | Analyzer(s): 
+ |  - SpatialAnalyzer File parsing: off / Use cache: off
+ | Pool of 2 analyzing process(es)
+  0%|          | 0/28 [00:00<?, ?it/s]  4%|▎         | 1/28 [00:00<00:06,  4.10it/s] 11%|█         | 3/28 [00:00<00:03,  7.89it/s] 18%|█▊        | 5/28 [00:00<00:02, 11.19it/s] 25%|██▌       | 7/28 [00:00<00:01, 12.81it/s] 32%|███▏      | 9/28 [00:00<00:01, 14.13it/s] 39%|███▉      | 11/28 [00:00<00:01, 15.11it/s] 46%|████▋     | 13/28 [00:01<00:01, 14.66it/s] 54%|█████▎    | 15/28 [00:01<00:00, 15.98it/s] 64%|██████▍   | 18/28 [00:01<00:00, 16.70it/s] 71%|███████▏  | 20/28 [00:01<00:00, 15.95it/s] 79%|███████▊  | 22/28 [00:01<00:00, 16.42it/s] 86%|████████▌ | 24/28 [00:01<00:00, 15.69it/s] 96%|█████████▋| 27/28 [00:01<00:00, 17.67it/s]100%|██████████| 28/28 [00:01<00:00, 14.83it/s]
+Running Analyzer Reduces:   0%|          | 0/1 [00:00<?, ?it/s]Running Analyzer Reduces: 100%|██████████| 1/1 [00:03<00:00,  3.71s/it]Running Analyzer Reduces: 100%|██████████| 1/1 [00:03<00:00,  3.71s/it]
+ | Analysis complete. Took 5.60 seconds (~ 0.200 per item)
+Reporting on ['Population', 'PCR_Parasite_Prevalence', 'New_Clinical_Cases']
+Grouped by ['Run_Number', 'xTLH']
+Full spatial report saved to /shared/home/bulinda/FE-2026-examples/experiments/my_outputs/lake_pickup_cal5/SpatialReportMalariaFiltered_children.csv
+
+=== analysing the 'all_ages' report ===
+analyzer will load: ['output/SpatialReportMalariaFiltered_all_ages_Population.bin', 'output/SpatialReportMalariaFiltered_all_ages_PCR_Parasite_Prevalence.bin', 'output/SpatialReportMalariaFiltered_all_ages_New_Clinical_Cases.bin']
+Analyze Manager
+ | 28 item(s) selected for analysis
+ | partial_analyze_ok is True, max_items is None, and 0 item(s) are being ignored
+ | Analyzer(s): 
+ |  - SpatialAnalyzer File parsing: off / Use cache: off
+ | Pool of 2 analyzing process(es)
+  0%|          | 0/28 [00:00<?, ?it/s]  4%|▎         | 1/28 [00:00<00:04,  5.70it/s] 14%|█▍        | 4/28 [00:00<00:02, 11.99it/s] 21%|██▏       | 6/28 [00:00<00:01, 14.21it/s] 29%|██▊       | 8/28 [00:00<00:01, 14.03it/s] 36%|███▌      | 10/28 [00:00<00:01, 15.62it/s] 43%|████▎     | 12/28 [00:00<00:01, 15.79it/s] 50%|█████     | 14/28 [00:00<00:00, 16.85it/s] 57%|█████▋    | 16/28 [00:01<00:00, 16.23it/s] 64%|██████▍   | 18/28 [00:01<00:00, 16.93it/s] 71%|███████▏  | 20/28 [00:01<00:00, 16.78it/s] 79%|███████▊  | 22/28 [00:01<00:00, 16.84it/s] 86%|████████▌ | 24/28 [00:01<00:00, 16.51it/s] 93%|█████████▎| 26/28 [00:01<00:00, 15.79it/s]100%|██████████| 28/28 [00:01<00:00, 15.70it/s]
+Running Analyzer Reduces:   0%|          | 0/1 [00:00<?, ?it/s]Running Analyzer Reduces: 100%|██████████| 1/1 [00:03<00:00,  3.67s/it]Running Analyzer Reduces: 100%|██████████| 1/1 [00:03<00:00,  3.67s/it]
+ | Analysis complete. Took 5.46 seconds (~ 0.195 per item)
+Reporting on ['Population', 'PCR_Parasite_Prevalence', 'New_Clinical_Cases']
+Grouped by ['Run_Number', 'xTLH']
+Full spatial report saved to /shared/home/bulinda/FE-2026-examples/experiments/my_outputs/lake_pickup_cal5/SpatialReportMalariaFiltered_all_ages.csv
+Report sets analysed: ['children', 'all_ages']
+
+Files written:
+  /shared/home/bulinda/FE-2026-examples/experiments/my_outputs/lake_pickup_cal5/SpatialReportMalariaFiltered_all_ages.csv ['Population', 'time', 'node', 'PCR_Parasite_Prevalence', 'New_Clinical_Cases', 'Run_Number', 'xTLH', 'experiment']
+  /shared/home/bulinda/FE-2026-examples/experiments/my_outputs/lake_pickup_cal5/SpatialReportMalariaFiltered_children.csv ['Population', 'time', 'node', 'PCR_Parasite_Prevalence', 'New_Clinical_Cases', 'Run_Number', 'xTLH', 'experiment']

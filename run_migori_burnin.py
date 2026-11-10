@@ -1,0 +1,128 @@
+"""
+run_migori_burnin.py - Migori-only burn-in (node_id 3), 50 years (1960 to 2010 equivalent), no interventions.
+Built from run_example_burnin_cal.py (same species, climate source, demographics and serialization). Differences:
+  - one node (Migori); climate and demographics from make_migori_inputs.py
+  - wider habitat grid: x_Temporary_Larval_Habitat 0.5 to 16 (13 values) x 4 seeds = 52 runs
+  - per-species vector report (ReportVectorStats) to measure the model's species mix
+  - spatial report adds Blood_Smear_Parasite_Prevalence next to PCR
+Run from FE-2026-examples:   python run_migori_burnin.py      It prints the experiment ID and stops.
+"""
+import os, pathlib
+import numpy as np
+import pandas as pd
+from idmtools.builders import SimulationBuilder
+from idmtools.core.platform_factory import Platform
+from idmtools.entities.experiment import Experiment
+from emodpy.emod_task import EMODTask
+import emod_api.campaign as camp
+import emodpy_malaria.demographics.MalariaDemographics as Demographics
+import emod_api.demographics.PreDefinedDistributions as Distributions
+from emodpy_malaria.reporters.builtin import *
+import manifest
+
+ID_REF = "LAKE_VICTORIA"
+SERIALIZE_YEARS = 50
+sim_years = SERIALIZE_YEARS
+NUM_SEEDS = 4
+XTLH_VALUES = [round(float(x), 4) for x in np.geomspace(0.5, 16.0, 13)]
+TEST_POP = 5000
+RUN_TIME = "12:00:00"
+CLIMATE_DIR = os.path.join("climate", "LAKE_MIGORI", "2010001-2019365")
+NODES_FILE = os.path.join(manifest.input_dir, "demographics", "lake_nodes_migori.csv")
+SPECIES = ["gambiae", "arabiensis", "funestus"]
+ARA_MULT = 0.125   # arabiensis habitat x0.125, from species test (funestus ~85%), see log step 8
+FILES = {"air": "dtk_15arcmin_air_temperature_daily", "land": "dtk_15arcmin_land_temperature_daily",
+         "rh": "dtk_15arcmin_relative_humidity_daily", "rain": "dtk_15arcmin_rainfall_daily"}
+
+
+def check_inputs():
+    cdir = os.path.join(manifest.input_dir, CLIMATE_DIR)
+    need = [NODES_FILE] + [os.path.join(cdir, n + e) for n in FILES.values() for e in (".bin", ".bin.json")]
+    miss = [p for p in need if not os.path.exists(p)]
+    if miss:
+        raise SystemExit("Missing input files (run python make_migori_inputs.py first):\n  " + "\n  ".join(miss))
+
+
+def set_param_fn(config):
+    import emodpy_malaria.malaria_config as conf
+    config = conf.set_team_defaults(config, manifest)
+    config.parameters.Climate_Model = "CLIMATE_BY_DATA"
+    config.parameters.Enable_Default_Reporting = 1
+    config.parameters.Air_Temperature_Filename = os.path.join(CLIMATE_DIR, FILES["air"] + ".bin")
+    config.parameters.Land_Temperature_Filename = os.path.join(CLIMATE_DIR, FILES["land"] + ".bin")
+    config.parameters.Rainfall_Filename = os.path.join(CLIMATE_DIR, FILES["rain"] + ".bin")
+    config.parameters.Relative_Humidity_Filename = os.path.join(CLIMATE_DIR, FILES["rh"] + ".bin")
+    conf.add_species(config, manifest, SPECIES)
+    conf.set_max_larval_capacity(config, "arabiensis", "TEMPORARY_RAINFALL", int(800000000 * ARA_MULT))
+    conf.set_max_larval_capacity(config, "arabiensis", "CONSTANT", int(80000000 * ARA_MULT))
+    config.parameters.Simulation_Duration = sim_years * 365
+    config.parameters.Run_Number = 0
+    config.parameters.x_Temporary_Larval_Habitat = 1.0
+    config.parameters.Serialized_Population_Writing_Type = "TIMESTEP"
+    config.parameters.Serialization_Time_Steps = [365 * SERIALIZE_YEARS]
+    config.parameters.Serialization_Mask_Node_Write = 0
+    config.parameters.Serialization_Precision = "REDUCED"
+    return config
+
+
+def build_camp():
+    camp.set_schema(manifest.schema_file)
+    return camp
+
+
+def build_demog():
+    nodes = pd.read_csv(NODES_FILE)
+    assert list(nodes.columns[:4]) == ["node_id", "lat", "lon", "pop"]
+    nodes["pop"] = TEST_POP
+    nodes.to_csv("lake_nodes_migori_test.csv", index=False)
+    demog = Demographics.from_csv(input_file="lake_nodes_migori_test.csv", id_ref=ID_REF,
+                                  init_prev=0.01, include_biting_heterogeneity=True)
+    demog.SetEquilibriumVitalDynamics()
+    demog.SetAgeDistribution(Distributions.AgeDistribution_SSAfrica)
+    return demog
+
+
+def set_pair(simulation, pair):
+    x, s = pair
+    simulation.task.set_parameter("x_Temporary_Larval_Habitat", x)
+    simulation.task.set_parameter("Run_Number", s)
+    return {"x_Temporary_Larval_Habitat": x, "Run_Number": s}
+
+
+def general_sim(selected_platform):
+    platform = Platform(selected_platform, job_directory=manifest.job_directory, partition=manifest.partition,
+                        time=RUN_TIME, modules=[manifest.singularity_module], max_running_jobs=manifest.max_running_jobs)
+    task = EMODTask.from_default2(config_path="config.json", eradication_path=manifest.eradication_path,
+                                  campaign_builder=build_camp, schema_path=manifest.schema_file,
+                                  param_custom_cb=set_param_fn, ep4_custom_cb=None,
+                                  demog_builder=build_demog, plugin_report=None)
+    task.set_sif(manifest.SIF_PATH, platform)
+    task.common_assets.add_directory(os.path.join(manifest.input_dir, "climate"), relative_path="climate")
+    end_day = sim_years * 365
+    add_malaria_summary_report(task, manifest, start_day=1, end_day=end_day, reporting_interval=30,
+                               age_bins=[0.25, 5, 115], max_number_reports=SERIALIZE_YEARS * 13,
+                               filename_suffix="monthly", pretty_format=True)
+    chans = ["Population", "PCR_Parasite_Prevalence", "Blood_Smear_Parasite_Prevalence", "New_Clinical_Cases"]
+    add_spatial_report_malaria_filtered(task, manifest, start_day=1, end_day=end_day, reporting_interval=1,
+                                        node_ids=None, min_age_years=0.25, max_age_years=100,
+                                        spatial_output_channels=chans, filename_suffix="all_ages")
+    # per-species vector counts every day: measures the species mix the model produces
+    add_report_vector_stats(task, manifest, species_list=SPECIES, stratify_by_species=True)
+    user = os.getlogin()
+    builder = SimulationBuilder()
+    pairs = [(x, s) for x in XTLH_VALUES for s in range(NUM_SEEDS)]
+    builder.add_sweep_definition(set_pair, pairs)
+    experiment = Experiment.from_builder(builder, task, name=f"{user}_LAKE_MIGORI_burnin_v1")
+    experiment.run(wait_until_done=False, platform=platform)
+    print("\n=== MIGORI BURN-IN SUBMITTED ===")
+    print("Burn-in ID:", experiment.uid, " simulations:", len(pairs))
+    print("xTLH values:", XTLH_VALUES)
+    print("Write this ID in the log. Check with: idmtools slurm", manifest.job_directory, "status --exp-id", experiment.uid)
+
+
+if __name__ == "__main__":
+    import emod_malaria.bootstrap as dtk
+    check_inputs()
+    dtk.setup(pathlib.Path(manifest.eradication_path).parent)
+    os.chmod(manifest.eradication_path, 0o755)
+    general_sim("SLURM_LOCAL")

@@ -66,7 +66,7 @@ class MonthlyPfPRAnalyzer(IAnalyzer):
                  burnin=None, filter_exists=False):
 
         super(MonthlyPfPRAnalyzer, self).__init__(working_dir=working_dir,
-                                                   filenames=["output/MalariaSummaryReport_monthly.json"]
+                                                   filenames=["{user}_pickup50/MalariaSummaryReport_monthly.json"]
                                                    )
      
         self.sweep_variables = sweep_variables or ["Run_Number"]
@@ -164,7 +164,7 @@ if __name__ == "__main__":
 
     
     expts = {
-        "output": "ae87bd07-1176-4bf8-81a0-a75cfd0cfec4"
+        "bulinda_pickup50": "bf33e6b9-a6f2-4e79-8893-3270eb41950e"
         #'week2_weather' : '2c090358-cb7b-44e5-a2fd-842a6c23a5b7'
         #'week2_outputs' : '142fd52a-981d-468c-a3cf-2900f0290490'
     }
@@ -179,7 +179,7 @@ if __name__ == "__main__":
     sweep_variables = ['Run_Number'] 
     
     serialize_years = 10  # Same as in run_example_burnin.py
-    step = 'burnin'
+    step = 'pickup'
     # set desired InsetChart channels to analyze and plot
 #    channels_inset_chart = ['Statistical Population', 'True Prevalence', 'New Clinical Cases','Infectious Vectors','Rainfall','Air Temperature']
     channels_inset_chart = ['Statistical Population', 'New Clinical Cases', 'Adult Vectors', 'Infected' , 'Air Temperature' , 'Rainfall']
@@ -220,16 +220,16 @@ if __name__ == "__main__":
                                     working_dir=wdir),
                                 ]
 
-#            analyzers_pickup = [InsetChartAnalyzer(expt_name=expt_name,
-#                                    channels=channels_inset_chart,
-#                                    start_year=2023,
-#                                    sweep_variables=sweep_variables,
-#                                    working_dir=wdir),
-#                                MonthlyPfPRAnalyzer(expt_name=expt_name,
-#                                    start_year=2023,
-#                                    sweep_variables=sweep_variables,
-#                                    working_dir=wdir)
-#                                ]
+            analyzers_pickup = [InsetChartAnalyzer(expt_name=expt_name,
+                                   channels=channels_inset_chart,
+                                   start_year=2000,
+                                   sweep_variables=sweep_variables,
+                                   working_dir=wdir),
+                               MonthlyPfPRAnalyzer(expt_name=expt_name,
+                                   start_year=2000,
+                                   sweep_variables=sweep_variables,
+                                   working_dir=wdir)
+                               ]
 
         if step == 'burnin':
             am = AnalyzeManager(configuration={}, ids=[(exp_id, ItemType.EXPERIMENT)],

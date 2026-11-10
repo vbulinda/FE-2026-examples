@@ -1,0 +1,26 @@
+[
+ {
+  "node_id": 3,
+  "start_day": 2616,
+  "coverage": 0.977,
+  "kill_effect": 0.8,
+  "kill_duration": 300,
+  "kill_decay": 30,
+  "phase": "pickup",
+  "repel_effect": 0.0,
+  "repel_duration": 0,
+  "repel_decay": 1
+ },
+ {
+  "node_id": 4,
+  "start_day": 2616,
+  "coverage": 0.0,
+  "kill_effect": 0.0,
+  "kill_duration": 0,
+  "kill_decay": 1,
+  "phase": "pickup",
+  "repel_effect": 0.0,
+  "repel_duration": 0,
+  "repel_decay": 1
+ }
+]

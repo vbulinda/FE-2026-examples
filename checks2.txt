@@ -1,0 +1,53 @@
+== ITN.csv
+node_id,phase,year,start_day,coverage,discard_k,discard_l,kill_effect,kill_decay,block_effect,block_decay,source
+1,pickup,2014,1461,0.925,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1; 2014 uses the 2015 survey as a proxy (no 2014 survey)"
+1,pickup,2015,1826,0.925,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+1,pickup,2020,3651,0.709,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2020, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+2,pickup,2014,1461,0.957,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1; 2014 uses the 2015 survey as a proxy (no 2014 survey)"
+2,pickup,2015,1826,0.957,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+2,pickup,2020,3651,0.761,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2020, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+3,pickup,2014,1461,0.747,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1; 2014 uses the 2015 survey as a proxy (no 2014 survey)"
+3,pickup,2015,1826,0.747,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+3,pickup,2020,3651,0.648,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2020, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+4,pickup,2014,1461,0.89,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1; 2014 uses the 2015 survey as a proxy (no 2014 survey)"
+4,pickup,2015,1826,0.89,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+4,pickup,2020,3651,0.601,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2020, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+5,pickup,2014,1461,0.689,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1; 2014 uses the 2015 survey as a proxy (no 2014 survey)"
+5,pickup,2015,1826,0.689,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+5,pickup,2020,3651,0.602,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2020, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+6,pickup,2014,1461,0.861,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1; 2014 uses the 2015 survey as a proxy (no 2014 survey)"
+6,pickup,2015,1826,0.861,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+6,pickup,2020,3651,0.787,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2020, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+7,pickup,2014,1461,0.592,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1; 2014 uses the 2015 survey as a proxy (no 2014 survey)"
+7,pickup,2015,1826,0.592,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+7,pickup,2020,3651,0.695,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2020, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+8,pickup,2014,1461,0.772,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1; 2014 uses the 2015 survey as a proxy (no 2014 survey)"
+8,pickup,2015,1826,0.772,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+8,pickup,2020,3651,0.633,PLACEHOLDER_2,PLACEHOLDER_1460,PLACEHOLDER_0.5,PLACEHOLDER_1460,PLACEHOLDER_0.9,PLACEHOLDER_1460,"Kenya MIS 2020, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+== ITN_age.csv
+node_id,year,age,age_usage,source
+1,2014,0,0.889,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1; 2014 uses the 2015 survey as a proxy (no 2014 survey)"
+1,2014,5,0.9,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1; 2014 uses the 2015 survey as a proxy (no 2014 survey)"
+1,2015,0,0.889,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+1,2015,5,0.9,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+1,2020,0,0.831,"Kenya MIS 2020, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+1,2020,5,0.795,"Kenya MIS 2020, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+2,2014,0,1.0,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1; 2014 uses the 2015 survey as a proxy (no 2014 survey)"
+2,2014,5,0.91,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1; 2014 uses the 2015 survey as a proxy (no 2014 survey)"
+2,2015,0,1.0,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+2,2015,5,0.91,"Kenya MIS 2015, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+2,2020,0,0.879,"Kenya MIS 2020, KEPR: ITN access (1 ITN per 2 people); usage = use/access, capped at 1"
+== case_management.csv
+node_id,phase,start_day,duration,trigger,age_min,age_max,coverage,rate,drug,year,source
+1,pickup,1,365,NewClinicalCase,0,5,0.515,0.3,AL,2010,"Kenya MIS 2015 zone ACT among under-5 fever; 5-15 and 15+ scaled 0.6 and 0.4 of under-5 (assumption, no survey data); severe 0.8 (assumption)"
+1,pickup,1,365,NewClinicalCase,5,15,0.309,0.3,AL,2010,"Kenya MIS 2015 zone ACT among under-5 fever; 5-15 and 15+ scaled 0.6 and 0.4 of under-5 (assumption, no survey data); severe 0.8 (assumption)"
+1,pickup,1,365,NewClinicalCase,15,115,0.206,0.3,AL,2010,"Kenya MIS 2015 zone ACT among under-5 fever; 5-15 and 15+ scaled 0.6 and 0.4 of under-5 (assumption, no survey data); severe 0.8 (assumption)"
+1,pickup,1,365,NewSevereCase,0,115,0.8,0.2,AL,2010,"Kenya MIS 2015 zone ACT among under-5 fever; 5-15 and 15+ scaled 0.6 and 0.4 of under-5 (assumption, no survey data); severe 0.8 (assumption)"
+1,pickup,366,365,NewClinicalCase,0,5,0.515,0.3,AL,2011,"Kenya MIS 2015 zone ACT among under-5 fever; 5-15 and 15+ scaled 0.6 and 0.4 of under-5 (assumption, no survey data); severe 0.8 (assumption)"
+1,pickup,366,365,NewClinicalCase,5,15,0.309,0.3,AL,2011,"Kenya MIS 2015 zone ACT among under-5 fever; 5-15 and 15+ scaled 0.6 and 0.4 of under-5 (assumption, no survey data); severe 0.8 (assumption)"
+1,pickup,366,365,NewClinicalCase,15,115,0.206,0.3,AL,2011,"Kenya MIS 2015 zone ACT among under-5 fever; 5-15 and 15+ scaled 0.6 and 0.4 of under-5 (assumption, no survey data); severe 0.8 (assumption)"
+== bin check
+Population all_ages mean day 1-365: 4980.0073  mean last year: 4995.509
+Population children mean day 1-365: 4980.0073  mean last year: 4995.509
+PCR_Parasite_Prevalence all_ages mean day 1-365: 0.3454  mean last year: 0.0753
+PCR_Parasite_Prevalence children mean day 1-365: 0.0309  mean last year: 0.0069

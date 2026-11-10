@@ -1,0 +1,45 @@
+Survey targets (children 6-59 months), Migori:
+ year       test  prev_pct  ci_lo  ci_hi  n_tested
+ 2015 microscopy      31.1   13.6   50.9        81
+ 2015        RDT      35.6   15.9   54.4        81
+ 2020 microscopy      13.6    4.7   21.9       212
+ 2020        RDT      17.4    7.5   28.1       212
+
+=== Migori, model PCR_Parasite_Prevalence vs survey RDT: J by xTLH over the 4 seeds (model % = median over seeds) ===
+         median  mean   min   max  model2015%  model2020%
+xTLH                                                     
+0.5000     23.4  23.3  22.5  23.9         0.9         0.0
+0.6674     22.9  22.9  22.4  23.4         1.6         0.0
+0.8909     21.6  21.4  20.3  21.9         3.3         0.0
+1.1892     21.5  21.3  20.5  21.7         3.7         0.1
+1.5874     19.5  19.7  19.1  20.9         6.6         0.1
+2.1189     18.3  18.4  17.3  19.8         8.7         0.1
+2.8284     17.8  17.7  16.6  18.6         9.6         0.0
+3.7755     11.2  11.8  10.0  14.8        15.0         3.0
+5.0397     11.3  11.0   8.1  13.4        18.1         2.7
+6.7272      4.8   5.8   3.4  10.4        22.5         8.1
+8.9797      3.1   2.7   1.0   3.7        26.0         9.8
+11.9865     0.4   0.4   0.3   0.6        29.7        18.0
+16.0000     1.7   1.8   0.0   3.9        35.5        24.3
+Lowest median J: xTLH 11.9865 (J=0.4); xTLH within 3.84 of it: 8.9797 to 16.0
+
+=== Migori, model Blood_Smear_Parasite_Prevalence vs survey microscopy: J by xTLH over the 4 seeds (model % = median over seeds) ===
+         median  mean   min   max  model2015%  model2020%
+xTLH                                                     
+0.5000     19.8  19.8  19.2  20.2         0.5         0.0
+0.6674     19.7  19.7  19.3  19.9         0.8         0.0
+0.8909     18.8  18.7  18.1  19.0         2.2         0.0
+1.1892     18.8  18.6  17.9  18.8         2.2         0.0
+1.5874     17.4  17.6  17.3  18.4         4.3         0.1
+2.1189     16.5  16.6  15.7  17.8         5.9         0.1
+2.8284     16.3  16.1  15.2  16.8         6.4         0.0
+3.7755     10.9  11.3   9.7  13.9        10.5         2.1
+5.0397     11.1  11.0   8.9  12.8        12.1         2.1
+6.7272      5.3   6.3   3.8  10.6        15.9         6.1
+8.9797      4.1   3.7   1.9   4.5        17.7         7.3
+11.9865     1.2   1.2   1.0   1.4        20.8        14.0
+16.0000     2.0   2.3   0.2   5.0        24.9        19.1
+Lowest median J: xTLH 11.9865 (J=1.2); xTLH within 3.84 of it: 8.9797 to 16.0
+
+Saved: migori_scores_per_seed_year.csv, migori_J_per_seed.csv
+Reminder: two survey points and one parameter; J near 0-4 = consistent. Survey CIs are wide (n=81 and 212).

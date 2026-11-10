@@ -1,0 +1,25 @@
+{
+    "Metadata": {
+        "Tool": "fetch_climate_lake.py",
+        "Author": "Lake Victoria EMOD project",
+        "WeatherSchemaVersion": "2.0",
+        "IdReference": "LAKE_VICTORIA",
+        "WeatherCellCount": 8,
+        "NodeCount": 8,
+        "OffsetEntryCount": 8,
+        "NumberDTKNodes": 8,
+        "DatavaluePerCell": 3650,
+        "DatavalueCount": 6144,
+        "UpdateResolution": "CLIMATE_UPDATE_DAY",
+        "OriginalDataYears": "2010-2026 (to 31 October 2026)",
+        "StartDayOfYear": "January 1",
+        "DataProvenance": "NASA POWER daily point data (T2M, RH2M, PRECTOTCORR), API v2.10.3, downloaded 2026-11-06; leap-day rule feb29",
+        "Resolution": "point (county centroid)",
+        "UpperLatitude": 0.5695,
+        "LeftLongitude": 34.1115,
+        "BottomLatitude": -0.9995,
+        "RightLongitude": 34.7617,
+        "DateCreated": "2026-11-06"
+    },
+    "NodeOffsets": "00000001000000000000000200006000000000030000c00000000004000120000000000500018000000000060001e0000000000700024000000000080002a000"
+}

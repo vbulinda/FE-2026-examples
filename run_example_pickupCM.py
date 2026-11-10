@@ -1,4 +1,4 @@
-#idmtools  
+#idmtools   
 from idmtools.assets import Asset, AssetCollection  
 from idmtools.builders import SimulationBuilder
 from idmtools.core.platform_factory import Platform
@@ -22,15 +22,17 @@ import os
 from functools import partial
 
 from utils_slurm import build_burnin_df
+import emodpy_malaria.interventions.treatment_seeking as cm
 
 #serialize_years= 10
 
-sim_years = 50
+sim_years = 5
 sim_start_year=2000
 num_seeds = 2
-serialize_years = 50
+serialize_years = 5
 pickup_years=5
-burnin_exp_id = '01f366b7-1eae-43af-9479-c67d7e3bf74c'
+burnin_exp_id = '6b6166df-0528-46d8-9624-22bf4953d9d6'
+#burnin_exp_id = '2f7d8855-f9be-43e1-af0e-d1e37921ae12'
 
 def set_param_fn(config):
     """
@@ -38,23 +40,25 @@ def set_param_fn(config):
     """
     import emodpy_malaria.malaria_config as conf
     config = conf.set_team_defaults(config, manifest)
-    config.parameters.Climate_Model = "CLIMATE_BY_DATA"
+    conf.add_species(config, manifest, ["gambiae", "arabiensis", "funestus"])
    
+    
+    
     # Defaults to 0 (off) in the installed Eradication build's schema - turn on so
     # InsetChart.json gets written to each simulation's output folder.
+    config.parameters.Simulation_Duration = sim_years*365
     config.parameters.Enable_Default_Reporting = 1
-   
+    
     ## existing contents
-    # config.parameters.Air_Temperature_Filename = os.path.join('/shared/home/bulinda/FE-2026-examples/climate/emod_weather_upper_east',
+    # config.parameters.Air_Temperature_Filename = os.path.join('/shared/home/alice/FE-2026-examples/climate/emod_weather_upper_east',
     #   'air_temperature.bin')
+    config.parameters.Climate_Model = "CLIMATE_BY_DATA"
     config.parameters.Air_Temperature_Filename = os.path.join('climate', 'air_temperature.bin')
     config.parameters.Land_Temperature_Filename = os.path.join('climate', 'land_temperature.bin')
     config.parameters.Rainfall_Filename = os.path.join('climate', 'rainfall.bin')
     config.parameters.Relative_Humidity_Filename = os.path.join('climate', 'relative_humidity.bin')
 
-    conf.add_species(config, manifest, ["gambiae", "arabiensis", "funestus"])
 
-    config.parameters.Simulation_Duration = sim_years*365
     config.parameters.Run_Number = 0
     # as a global variable at the top of the script, like sim_years that we use to define simulation duration:
 #def set_param_fn():
@@ -64,9 +68,9 @@ def set_param_fn(config):
     # config.parameters.Serialized_Population_Writing_Type = "TIMESTEP"
     # config.parameters.Serialization_Time_Steps = [365 * serialize_years]
     # config.parameters.Serialization_Mask_Node_Write = 0
-        # config.parameters.Simulation_Start_Year = sim_start_year
+    # config.parameters.Simulation_Start_Year = sim_start_year
 # def set_param_fn():
-    ## existing contents
+    ## existing contents 
 
     #Add serialization - add pickup "read" parameters to config.json
     config.parameters.Serialized_Population_Reading_Type = "READ"
@@ -74,7 +78,7 @@ def set_param_fn(config):
     config.parameters.Serialization_Time_Steps = [serialize_years*365]
     config.parameters.Serialization_Precision = "REDUCED"
     #Add calibrated larval habitat
-    config.parameters.x_Temporary_Larval_Habitat = 0.681292
+    config.parameters.x_Temporary_Larval_Habitat = 0.681292 
     return config
 
 def set_param(simulation, param, value):
@@ -89,14 +93,87 @@ def set_param(simulation, param, value):
     """
     return simulation.task.set_parameter(param, value)
 
+def fix_property_restrictions(obj):
+    """
+    Replace every null Property_Restrictions_Within_Node
+    with an empty list in the campaign dictionary.
+    """
+
+    if isinstance(obj, dict):
+
+        for key, value in obj.items():
+
+            if key == "Property_Restrictions_Within_Node" and value is None:
+                obj[key] = []
+
+            else:
+                fix_property_restrictions(value)
+
+    elif isinstance(obj, list):
+
+        for item in obj:
+            fix_property_restrictions(item)    
+
 def build_camp():
     """
     This function builds a campaign input file for the DTK using emod_api.
     """
 
     camp.set_schema(manifest.schema_file)
-   
+    
     return camp
+    
+def build_camp(cm_cov_U5=0.80, cm_start = 1):
+
+    camp.schema_path = manifest.schema_file
+
+    # Add case management: cm.add_treatment_seeking
+    
+    # This example assumes adults will seek treatment 75% as often as U5s and severe cases will seek treatment 15% more than U5s (up to 100% coverage)
+    events = cm._get_events(camp, start_day=cm_start, drug=['Artemether', 'Lumefantrine'],
+                      targets=[{'trigger': 'NewClinicalCase', 'coverage': cm_cov_U5, 
+                                'agemin': 0, 'agemax': 5,'rate': 0.3},
+                               {'trigger': 'NewClinicalCase', 'coverage': cm_cov_U5*0.75, 
+                                'agemin': 5, 'agemax': 115,'rate': 0.3},
+                               {'trigger': 'NewSevereCase', 'coverage': min(cm_cov_U5*1.15,1), 
+                                'agemin': 0, 'agemax': 115,'rate': 0.5}],
+                      broadcast_event_name="Received_Treatment")
+    broadcast_event_name="Received_Treatment"
+    return camp  
+
+ # cm.add_treatment_seeking(
+    #camp,
+    #start_day=cm_start,
+    #drug=['Artemether', 'Lumefantrine'],
+    #node_ids=[],
+    #ind_property_restrictions=[],
+    #targets=[
+        #{'trigger': 'NewClinicalCase', 'coverage': cm_cov_U5,
+         #'agemin': 0, 'agemax': 5, 'rate': 0.3},
+        #{'trigger': 'NewClinicalCase', 'coverage': cm_cov_U5 * 0.75,
+         #'agemin': 5, 'agemax': 115, 'rate': 0.3},
+        #{'trigger': 'NewSevereCase', 'coverage': min(cm_cov_U5 * 1.15, 1),
+         #'agemin': 0, 'agemax': 115, 'rate': 0.5}
+    #],
+    # broadcast_event_name="Received_Treatment")
+    # return camp
+    ### This is for sweeping multiple parameters
+
+def update_campaign_multiple_parameters(simulation, cm_cov_U5, cm_start):
+
+    build_campaign_partial = partial(build_camp, cm_cov_U5=cm_cov_U5, cm_start=cm_start)
+    simulation.task.create_campaign_from_callback(build_campaign_partial)
+  
+    return dict(cm_cov_U5=cm_cov_U5, cm_start=cm_start)
+def update_serialize_parameters(simulation, df, x: int):
+    path = df["serialized_file_path"][x]
+    seed = int(df["Run_Number"][x])
+
+    simulation.task.set_parameter("Serialized_Population_Filenames", df["Serialized_Population_Filenames"][x])
+    simulation.task.set_parameter("Serialized_Population_Path", os.path.join(path, "output"))
+    simulation.task.set_parameter("Run_Number", seed) #match pickup simulation run number to burnin simulation
+
+    return {"Run_Number":seed}
 
 
 def build_demog():
@@ -105,29 +182,31 @@ def build_demog():
     """
 
     demog = Demographics.from_template_node(lat=10.90, lon=-1.09, pop=1000, name="Navrongo")
-    demog.SetEquilibriumVitalDynamics()
+    demog.SetEquilibriumVitalDynamics() 
     age_distribution = Distributions.AgeDistribution_SSAfrica
     demog.SetAgeDistribution(age_distribution)
     return demog
 
-
+ 
 def general_sim(selected_platform):
     """
-    This function is designed to be a parameterized version of the sequence of things we do
-    every time we run an emod experiment.
+    This function is designed to be a parameterized version of the sequence of things we do 
+    every time we run an emod experiment. 
     """
 
     # Set platform and associated values, such as the maximum number of jobs to run at one time.
     # All cluster-specific settings live in manifest.py so users only edit that file.
-    platform = Platform(selected_platform, job_directory=manifest.job_directory,
-                            partition=manifest.partition, time=manifest.sim_time,
-                            modules=[manifest.singularity_module],
-                            max_running_jobs=manifest.max_running_jobs)
-
-    # create EMODTask
+    #platform = Platform(selected_platform, job_directory=manifest.job_directory,
+                            #partition='demo', time='0:10:00' ,
+                            #modules=[manifest.singularity_module],
+                            #max_running_jobs=manifest.max_running_jobs=100, array_batch_size=50)
+                            
+    platform = Platform(selected_platform,job_directory=manifest.job_directory,partition=manifest.partition,time='0:10:00',modules=[manifest.singularity_module],
+    max_running_jobs=100,mem_per_cpu=5000, array_batch_size=50)
+    # create EMODTask 
     print("Creating EMODTask (from files)...")
 
-   
+    
     task = EMODTask.from_default2(
         config_path="config.json",
         eradication_path=manifest.eradication_path,
@@ -138,24 +217,35 @@ def general_sim(selected_platform):
         demog_builder=build_demog,
         plugin_report=None
     )
-   
-   
+    
+    
     # set the singularity image to be used when running this experiment
     task.set_sif(manifest.SIF_PATH, platform)
-    #task.common_assets.add_directory(os.path.join('/shared/home/bulinda/FE-2026-examples'), relative_path="climate")
-   
-    task.common_assets.add_directory(os.path.join(manifest.input_dir, "emod_weather_upper_east"), relative_path="climate")
+    #task.common_assets.add_directory(os.path.join('/shared/home/alice/FE-2026-examples'), relative_path="climate")
+    
+    task.common_assets.add_directory(os.path.join(manifest.input_dir, "emod_weather_upper_east"), relative_path="climate") 
     builder = SimulationBuilder()
-#    builder.add_sweep_definition(partial(set_param, param='Run_Number'), range(num_seeds))
-    builder.add_sweep_definition(partial(set_param, param='x_Temporary_Larval_Habitat'), np.logspace(-0.5,1,3))
+    builder.add_sweep_definition(partial(set_param, param='Run_Number'), range(num_seeds))
+    builder.add_sweep_definition(partial(set_param, param='x_Temporary_Larval_Habitat'), np.logspace(-0.5,1,2))
     burnin_df = build_burnin_df(burnin_exp_id, platform, serialize_years*365)
     builder.add_sweep_definition(partial(update_serialize_parameters, df=burnin_df), range(len(burnin_df.index)))
-    add_event_recorder(task, event_list=["HappyBirthday", "Births"],
-                       start_day=1, end_day=sim_years*365,
+    
+    builder.add_multiple_parameter_sweep_definition(
+        update_campaign_multiple_parameters,
+        dict(
+            #cm_cov_U5=[ 0.5],
+            #cm_start=[1, 100]
+            cm_cov_U5=[ 0.8],
+            cm_start=[1]
+        )
+    )
+    add_event_recorder(task, event_list=["HappyBirthday", "Births" , "Received_Treatment"],
+                       start_day=1, end_day=sim_years*365, 
                        node_ids=[1], min_age_years=0,
                        max_age_years=100)
+
     add_malaria_summary_report(task, manifest, start_day=1,
-                               end_day=sim_years*365,
+                               end_day=sim_years*365, 
                                reporting_interval=30,
                                age_bins=[0.25, 5, 115],
                                max_number_reports=20,
@@ -169,33 +259,24 @@ def general_sim(selected_platform):
                                     end_day=365+year*365, reporting_interval=30,
                                     age_bins=[0.25, 5, 115],
                                     max_number_reports=13,
-                                    pretty_format=True,
-                                    filename_suffix=f'Monthly_U5_{sim_year}')
+                                    pretty_format=True, 
+                                    filename_suffix=f'Monthly')
+                                    #filename_suffix=f'Monthly_U5_{sim_year}')
     user = os.getlogin()
     #experiment = Experiment.from_task(task, name=f'{user}_FE_example_sweep')
     #experiment = Experiment.from_builder(builder, task, name='{user}_FE_example_sweep')
-    experiment = Experiment.from_builder(builder, task, name=f'{user} my_output')
+    experiment = Experiment.from_builder(builder, task, name=f'example_sim_pickup_cm') 
     # The last step is to call run() on the ExperimentManager to run the simulations.
+    ## now the codes for sweeping multiple parameters
+
     experiment.run(wait_until_done=False, platform=platform)
-
-
     # Check result
     #if not experiment.succeeded:
         #print(f"Experiment {experiment.uid} failed.\n")
        # exit()
-   
+    
     #print(f"Experiment {experiment.uid} succeeded.")
 
-def update_serialize_parameters(simulation, df, x: int):
-
-   path = df["serialized_file_path"][x]
-   seed = int(df["Run_Number"][x])
-
-   simulation.task.set_parameter("Serialized_Population_Filenames", df["Serialized_Population_Filenames"][x])
-   simulation.task.set_parameter("Serialized_Population_Path", os.path.join(path, "output"))
-   simulation.task.set_parameter("Run_Number", seed) #match pickup simulation run number to burnin simulation
-
-   return {"Run_Number":seed}
 
 if __name__ == "__main__":
     import emod_malaria.bootstrap as dtk

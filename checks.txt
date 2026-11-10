@@ -1,0 +1,82 @@
+2:run_lake_pickup3.py  -  calibration pickup: pickup v2 (case management + ITN from the MIS tables) on the 20-simulation calibration burn-in,
+7:  - case management from interventions/case_management.csv   (rows with phase == "pickup", one campaign per year)
+8:  - ITN campaigns from interventions/ITN.csv + ITN_age.csv   (usage depends on age; kill/block/decay are PLACEHOLDERS)
+9:  - IRS from interventions/IRS.json, only if that file exists (it does not until NMCP data arrive or you build it)
+12:Put these files in <manifest.input_dir>/interventions/ :  case_management.csv, ITN.csv, ITN_age.csv
+29:import emodpy_malaria.interventions.treatment_seeking as cm
+30:import emodpy_malaria.interventions.usage_dependent_bednet as itn
+31:import emodpy_malaria.interventions.irs as irs
+42:PICKUP_YEARS    = 11         # 2010-2020: covers the ITN rounds of 2014, 2015, 2020 (day 1 = 1 Jan 2010)
+47:INTERV_DIR      = os.path.join(manifest.input_dir, "interventions")
+94:    """float() that also reads 'PLACEHOLDER_<number>' tags (unknown ITN efficacy values)."""
+97:            print("WARNING: PLACEHOLDER values are used for ITN kill/block/decay. Replace with cited values.")
+122:            targets = [{"trigger": str(sub["trigger"][r]), "coverage": float(sub["coverage"][r]),
+125:            cm.add_treatment_seeking(camp, node_ids=[int(node)], start_day=int(sub["start_day"][0]),
+129:    # ---- ITN: usage depends on age; kill/block/decay may be placeholders ----
+130:    itn_all = _node_table(pd.read_csv(os.path.join(INTERV_DIR, "ITN.csv")), node_ids)
+131:    itn_age = pd.read_csv(os.path.join(INTERV_DIR, "ITN_age.csv"))
+132:    season_path = os.path.join(INTERV_DIR, "ITN_season.csv")
+135:        seasonal = {"Times": list(sdf["season_time"]), "Values": list(sdf["season_usage"])}
+137:        print("NOTE: ITN_season.csv not found; using flat seasonal usage.")
+139:    for node in itn_all["node_id"].unique():
+140:        n_df = itn_all[(itn_all["node_id"] == node) & (itn_all["phase"] == "pickup")].reset_index(drop=True)
+143:            age_y = itn_age[itn_age["year"] == year]
+144:            if "node_id" in itn_age.columns:      # county-specific usage by age
+149:            itn.add_scheduled_usage_dependent_bednet(
+150:                camp, node_ids=[int(node)], intervention_name="UsageDependentBednet",
+151:                start_day=int(sub["start_day"][0]), demographic_coverage=float(sub["coverage"][0]),
+152:                killing_initial_effect=_num(sub["kill_effect"][0]),
+153:                killing_decay_time_constant=int(_num(sub["kill_decay"][0])),
+154:                blocking_initial_effect=_num(sub["block_effect"][0]),
+155:                blocking_decay_time_constant=int(_num(sub["block_decay"][0])),
+156:                age_dependence={"Times": list(age_y["age"]), "Values": list(age_y["age_usage"])},
+168:                    camp, node_ids=[int(node)], start_day=int(n_df["start_day"][r]),
+169:                    demographic_coverage=float(n_df["coverage"][r]),
+170:                    killing_initial_effect=float(n_df["kill_effect"][r]), killing_box_duration=int(n_df["kill_duration"][r]),
+171:                    killing_decay_time_constant=int(n_df["kill_decay"][r]),
+173:                    repelling_decay_time_constant=int(n_df["repel_decay"][r]))
+243:    need = [os.path.join(INTERV_DIR, n) for n in ("case_management.csv", "ITN.csv", "ITN_age.csv")]
+282:        add_report_event_counter(task, manifest, start_day=1, end_day=end_day, node_ids=[n],
+286:    add_malaria_summary_report(task, manifest, start_day=1, end_day=end_day, reporting_interval=30,
+289:    add_spatial_report_malaria_filtered(task, manifest, start_day=1, end_day=end_day, reporting_interval=1,
+295:    add_spatial_report_malaria_filtered(task, manifest, start_day=1, end_day=end_day, reporting_interval=1,
+------
+ITN.csv
+ITN_age.csv
+case_management.csv
+------
+['Metadata', 'DataByTime', 'DataByTimeAndAgeBins', 'DataByTimeAndPfPRBinsAndAgeBins', 'DataByTimeAndInfectiousnessBinsAndPfPRBinsAndAgeBins']
+Metadata ['Start_Day', 'Reporting_Interval', 'Age Bins', 'Parasitemia Bins', 'Gametocytemia Bins', 'Infectiousness Bins']
+DataByTime ['Time Of Report', 'Annual EIR', 'PfPR_2to10', 'No Infection Streak', 'Fraction Days Under 1pct Infected']
+   Time Of Report last month: 4015
+   Annual EIR last month: 0.6838691222875
+   PfPR_2to10 last month: 0.03034970028062
+   No Infection Streak last month: 0
+   Fraction Days Under 1pct Infected last month: 0
+DataByTimeAndAgeBins ['PfPR by Age Bin', 'Pf Gametocyte Prevalence by Age Bin', 'Mean Log Parasite Density by Age Bin', 'New Infections by Age Bin', 'Annual Clinical Incidence by Age Bin', 'Annual Severe Incidence by Age Bin', 'Average Population by Age Bin', 'Annual Severe Incidence by Anemia by Age Bin']
+   PfPR by Age Bin last month: [0.002758164165931, 0.01904543506991, 0.02928974317129]
+   Pf Gametocyte Prevalence by Age Bin last month: [0.003640776699029, 0.01199089970973, 0.01397232818588]
+   Mean Log Parasite Density by Age Bin last month: [4.102309617996, 2.810986444902, 2.253413460093]
+   New Infections by Age Bin last month: [1, 81, 1198]
+   Annual Clinical Incidence by Age Bin last month: [0.04026919603348, 0.1189434430562, 0.0972606119758]
+   Annual Severe Incidence by Age Bin last month: [0, 0.002202656352893, 0]
+   Average Population by Age Bin last month: [377.6666666667, 6904.541666667, 32680.66666667]
+   Annual Severe Incidence by Anemia by Age Bin last month: [0, 0.002202656352893, 0]
+   Annual Severe Incidence by Parasites by Age Bin last month: [0, 0, 0]
+   Annual Severe Incidence by Fever by Age Bin last month: [0, 0, 0]
+   Annual Severe Anemia by Age Bin last month: [0, 0, 0]
+   Annual Moderate Anemia by Age Bin last month: [1.006729900837, 0.6894314384554, 0.02001055653091]
+   Annual Mild Anemia by Age Bin last month: [1.610767841339, 3.63218032592, 0.8497506098938]
+DataByTimeAndPfPRBinsAndAgeBins ['PfPR by Parasitemia and Age Bin', 'PfPR by Gametocytemia and Age Bin', 'Smeared PfPR by Parasitemia and Age Bin', 'Smeared PfPR by Gametocytemia and Age Bin', 'Smeared True PfPR by Parasitemia and Age Bin', 'Smeared True PfPR by Gametocytemia and Age Bin']
+   PfPR by Parasitemia and Age Bin last month: [[0.001765225066196, 0.01575653706196, 0.05503763693111], [0.0002206531332745, 0.004658769288331, 0.007631933253096], [0.000441306266549, 0.003270793982222, 0.005001682952204], [0.001434245366284, 0.004248411371742, 0.00324860773954], [0.0005516328331862, 0.001780229196966, 0.0009829970828828]]
+   PfPR by Gametocytemia and Age Bin last month: [[0.002206531332745, 0.02117567543103, 0.06606352379592], [0.001323918799647, 0.004882052272357, 0.004458548377226], [0.000882612533098, 0.003657013197835, 0.001380785785684], [0, 0, 0], [0, 0, 0]]
+   Smeared PfPR by Parasitemia and Age Bin last month: [[0.001765225066196, 0.01569619030952, 0.05499938801738], [0.0002206531332745, 0.004694977339794, 0.007658707492707], [0.0002206531332745, 0.002148344386847, 0.003430927561657], [0, 0, 0], [0.002206531332745, 0.007175228865059, 0.005813834887089]]
+   Smeared PfPR by Gametocytemia and Age Bin last month: [[0.00198587819947, 0.02106705127664, 0.06601125028049], [0.001544571932921, 0.004996711101992, 0.004503172109912], [0.000882612533098, 0.003620805146371, 0.001380785785684], [0, 0, 0], [0, 3.017337621976e-05, 7.64978274617e-06]]
+   Smeared True PfPR by Parasitemia and Age Bin last month: [[0.001875551632833, 0.01487547447634, 0.05120892066665], [0.0001103265666372, 0.005213959410774, 0.01037310540381], [0.000441306266549, 0.003620805146371, 0.005570316803003], [0.001323918799647, 0.004037197738204, 0.003476826258134], [0.0006619593998235, 0.001967304129528, 0.001273688827237]]
+   Smeared True PfPR by Gametocytemia and Age Bin last month: [[0.002316857899382, 0.02035495959785, 0.06213663531956], [0.001103265666372, 0.005286375513702, 0.007009750923074], [0.0009929390997352, 0.003850122805641, 0.00241733134779], [0, 0.0002172483087823, 0.0002129189531017], [0, 6.034675243952e-06, 0.0001262214153118]]
+DataByTimeAndInfectiousnessBinsAndPfPRBinsAndAgeBins ['Infectiousness by Gametocytemia and Age Bin', 'Age scaled Infectiousness by Gametocytemia and Age Bin', 'Infectiousness by smeared Gametocytemia and Age Bin', 'Smeared Infectiousness by smeared Gametocytemia and Age Bin', 'Age scaled Smeared Infectiousness by smeared Gametocytemia and Age Bin']
+   Infectiousness by Gametocytemia and Age Bin last month: [[[0.002206531332745, 0.02117567543103, 0.06606352379592], [0.0005516328331862, 0.001387975306109, 0.001555455825055], [0.0003309796999117, 0.0006457102511028, 0.000178494930744], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0.0005516328331862, 0.001285385826962, 0.001396085351176], [0.000441306266549, 0.001025894791472, 0.00035953978907], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0.0002206531332745, 0.001303489852694, 0.0009179739295404], [0.0001103265666372, 0.0007362303797621, 0.0002830419616083], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0.0009052012865928, 0.0005890332714551], [0, 0.000500878045248, 0.0002294934823851], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0.00074829973025, 0.0003302156218763], [0, 0, 0], [0, 0, 0]]]
+   Age scaled Infectiousness by Gametocytemia and Age Bin last month: [[[0.002206531332745, 0.02117567543103, 0.06606352379592], [0.001323918799647, 0.004544110458696, 0.002316609208298], [0.000882612533098, 0.002981129570512, 0.0005023357336652], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0.0003379418136613, 0.001439434120071], [0, 0.0006758836273226, 0.0004424124354868], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0.0005252850819037], [0, 0, 0.0002205687358479], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0.0001772199669529], [0, 0, 0.0001542706187144], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 6.119826196936e-05], [0, 0, 0], [0, 0, 0]]]
+   Infectiousness by smeared Gametocytemia and Age Bin last month: [[[0.002316857899382, 0.01999891375846, 0.06175669610983], [0.000441306266549, 0.002317315293677, 0.004814263274923], [0.0003309796999117, 0.0008086464826895, 0.0009294486036597], [0, 7.845077817137e-05, 0.0001708451479978], [0, 6.034675243952e-06, 0.0001262214153118]], [[0, 0.000253456360246, 0.0003047163460558], [0.000441306266549, 0.001025894791472, 0.000990646865629], [0.0005516328331862, 0.0009655480390323, 0.0004398625079048], [0, 6.638142768347e-05, 2.039942065645e-05], [0, 0, 0]], [[0, 8.448545341532e-05, 6.502315334245e-05], [0.0002206531332745, 0.001074172193423, 0.0006872054833643], [0.0001103265666372, 0.0008569238846411, 0.0004385875441137], [0, 2.413870097581e-05, 1.019971032823e-05], [0, 0, 0]], [[0, 1.810402573186e-05, 1.019971032823e-05], [0, 0.0006577796015907, 0.0004016135941739], [0, 0.0006819183025665, 0.0003990636665919], [0, 4.827740195161e-05, 7.64978274617e-06], [0, 0, 0]], [[0, 0, 0], [0, 0.0002112136335383, 0.0001160217049836], [0, 0.0005370860967117, 0.0002103690255197], [0, 0, 3.824891373085e-06], [0, 0, 0]]]
+   Smeared Infectiousness by smeared Gametocytemia and Age Bin last month: [[[0.002316857899382, 0.01999891375846, 0.06173884661676], [0.000441306266549, 0.00247421685002, 0.00487291160931], [0.000441306266549, 0.0009112359618367, 0.0009829970828828], [0, 8.448545341532e-05, 0.0001695701842068], [0, 6.034675243952e-06, 0.0001262214153118]], [[0, 0.0002413870097581, 0.0003225658391302], [0.0005516328331862, 0.0009896867400081, 0.0009753473001367], [0.000441306266549, 0.0009112359618367, 0.0004475122906509], [0, 6.034675243952e-05, 2.294934823851e-05], [0, 0, 0]], [[0, 9.655480390323e-05, 5.86483343873e-05], [0.0001103265666372, 0.0008448545341532, 0.0005520593215153], [0.0001103265666372, 0.0007422650550061, 0.0003518900063238], [0, 3.017337621976e-05, 6.374818955142e-06], [0, 0, 0]], [[0, 1.810402573186e-05, 1.657452928337e-05], [0, 0.0007664037559819, 0.00049596091471], [0, 0.0007784731064698, 0.0004194630872483], [0, 3.620805146371e-05, 1.019971032823e-05], [0, 0, 0]], [[0, 0, 0], [0, 0.0002112136335383, 0.0001134717774015], [0, 0.0005069127204919, 0.0002154688806838], [0, 6.034675243952e-06, 3.824891373085e-06], [0, 0, 0]]]
+   Age scaled Smeared Infectiousness by smeared Gametocytemia and Age Bin last month: [[[0.002316857899382, 0.02033082089687, 0.06190841680096], [0.001103265666372, 0.004894121622845, 0.005464494808347], [0.0009929390997352, 0.003367348786125, 0.001347636727117], [0, 0.0001870749325625, 0.0001874196772812], [0, 6.034675243952e-06, 0.0001262214153118]], [[0, 2.413870097581e-05, 0.0001950694600273], [0, 0.0003862192156129, 0.001002121539748], [0, 0.0004707046690282, 0.0005520593215153], [0, 3.017337621976e-05, 1.274963791028e-05], [0, 0, 0]], [[0, 0, 2.804920340262e-05], [0, 6.034675243952e-06, 0.0003353154770405], [0, 1.20693504879e-05, 0.0002855918891903], [0, 0, 8.924746537198e-06], [0, 0, 0]], [[0, 0, 5.099855164113e-06], [0, 0, 0.0001746700393709], [0, 0, 0.0001861447134901], [0, 0, 2.549927582057e-06], [0, 0, 0]], [[0, 0, 0], [0, 0, 3.314905856674e-05], [0, 0, 4.589869647702e-05], [0, 0, 1.274963791028e-06], [0, 0, 0]]]
