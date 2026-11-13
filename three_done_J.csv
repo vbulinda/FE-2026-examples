@@ -1,0 +1,597 @@
+test,xTLH,Run_Number,J,file
+RDT,4.0,0,5.222425038570928,migori_J_c81k30.csv
+RDT,4.0,1,5.490394022825677,migori_J_c81k30.csv
+RDT,4.0,2,4.043549545717776,migori_J_c81k30.csv
+RDT,4.0,3,4.373130208911281,migori_J_c81k30.csv
+RDT,4.7568,0,3.1814017764904676,migori_J_c81k30.csv
+RDT,4.7568,1,4.470458146263965,migori_J_c81k30.csv
+RDT,4.7568,2,2.583140468752818,migori_J_c81k30.csv
+RDT,4.7568,3,3.040271515419075,migori_J_c81k30.csv
+RDT,5.6569,0,3.359570381546402,migori_J_c81k30.csv
+RDT,5.6569,1,3.480282949656017,migori_J_c81k30.csv
+RDT,5.6569,2,5.284184612770186,migori_J_c81k30.csv
+RDT,5.6569,3,3.4078843962220833,migori_J_c81k30.csv
+RDT,6.7272,0,3.8308578854202144,migori_J_c81k30.csv
+RDT,6.7272,1,3.088668949033426,migori_J_c81k30.csv
+RDT,6.7272,2,5.205067223891461,migori_J_c81k30.csv
+RDT,6.7272,3,6.225809016066698,migori_J_c81k30.csv
+RDT,8.0,0,4.578870704763975,migori_J_c81k30.csv
+RDT,8.0,1,2.9778782881670187,migori_J_c81k30.csv
+RDT,8.0,2,5.8205859371501685,migori_J_c81k30.csv
+RDT,8.0,3,5.648497133808781,migori_J_c81k30.csv
+RDT,9.5137,0,5.073294759071923,migori_J_c81k30.csv
+RDT,9.5137,1,4.124220572303196,migori_J_c81k30.csv
+RDT,9.5137,2,6.857570128239674,migori_J_c81k30.csv
+RDT,9.5137,3,7.372428140717902,migori_J_c81k30.csv
+RDT,11.3137,0,10.581219063948415,migori_J_c81k30.csv
+RDT,11.3137,1,7.531439101347049,migori_J_c81k30.csv
+RDT,11.3137,2,7.151565130182687,migori_J_c81k30.csv
+RDT,11.3137,3,10.627497436660775,migori_J_c81k30.csv
+RDT,13.4543,0,12.12674102427552,migori_J_c81k30.csv
+RDT,13.4543,1,13.287413274745386,migori_J_c81k30.csv
+RDT,13.4543,2,9.28908617476967,migori_J_c81k30.csv
+RDT,13.4543,3,11.860023096784085,migori_J_c81k30.csv
+RDT,16.0,0,17.727034862310827,migori_J_c81k30.csv
+RDT,16.0,1,8.654852137241221,migori_J_c81k30.csv
+RDT,16.0,2,11.199629957719981,migori_J_c81k30.csv
+RDT,16.0,3,14.602832115503874,migori_J_c81k30.csv
+RDT,19.0273,0,24.38536695976825,migori_J_c81k30.csv
+RDT,19.0273,1,19.737788269713896,migori_J_c81k30.csv
+RDT,19.0273,2,17.362091844363654,migori_J_c81k30.csv
+RDT,19.0273,3,13.510432510659028,migori_J_c81k30.csv
+RDT,22.6274,0,26.263704933859003,migori_J_c81k30.csv
+RDT,22.6274,1,20.703453412571065,migori_J_c81k30.csv
+RDT,22.6274,2,26.325062663072234,migori_J_c81k30.csv
+RDT,22.6274,3,25.394030227117696,migori_J_c81k30.csv
+RDT,26.9087,0,28.768265879425325,migori_J_c81k30.csv
+RDT,26.9087,1,25.68370932744099,migori_J_c81k30.csv
+RDT,26.9087,2,53.16829611859671,migori_J_c81k30.csv
+RDT,26.9087,3,41.67710144537865,migori_J_c81k30.csv
+RDT,32.0,0,66.08411065436712,migori_J_c81k30.csv
+RDT,32.0,1,35.41496268992884,migori_J_c81k30.csv
+RDT,32.0,2,38.78170343302592,migori_J_c81k30.csv
+RDT,32.0,3,36.92366804514529,migori_J_c81k30.csv
+microscopy,4.0,0,5.263773713853831,migori_J_c81k30.csv
+microscopy,4.0,1,5.8167037688665175,migori_J_c81k30.csv
+microscopy,4.0,2,4.2251064570923464,migori_J_c81k30.csv
+microscopy,4.0,3,4.6258095076988335,migori_J_c81k30.csv
+microscopy,4.7568,0,4.019799719716824,migori_J_c81k30.csv
+microscopy,4.7568,1,5.008275167732252,migori_J_c81k30.csv
+microscopy,4.7568,2,3.269150034257846,migori_J_c81k30.csv
+microscopy,4.7568,3,3.8837850789773443,migori_J_c81k30.csv
+microscopy,5.6569,0,4.064636818609355,migori_J_c81k30.csv
+microscopy,5.6569,1,4.157781902498187,migori_J_c81k30.csv
+microscopy,5.6569,2,5.524205692176727,migori_J_c81k30.csv
+microscopy,5.6569,3,4.138939311275104,migori_J_c81k30.csv
+microscopy,6.7272,0,4.229551489212276,migori_J_c81k30.csv
+microscopy,6.7272,1,3.9788564102254598,migori_J_c81k30.csv
+microscopy,6.7272,2,5.355087230505395,migori_J_c81k30.csv
+microscopy,6.7272,3,6.118831086599275,migori_J_c81k30.csv
+microscopy,8.0,0,4.779876928692719,migori_J_c81k30.csv
+microscopy,8.0,1,3.6711883868131254,migori_J_c81k30.csv
+microscopy,8.0,2,6.28735508376384,migori_J_c81k30.csv
+microscopy,8.0,3,5.278998673779206,migori_J_c81k30.csv
+microscopy,9.5137,0,5.6314427267716365,migori_J_c81k30.csv
+microscopy,9.5137,1,4.622212807078835,migori_J_c81k30.csv
+microscopy,9.5137,2,6.446614097425273,migori_J_c81k30.csv
+microscopy,9.5137,3,6.983522638186561,migori_J_c81k30.csv
+microscopy,11.3137,0,9.811545629595797,migori_J_c81k30.csv
+microscopy,11.3137,1,6.766497580881088,migori_J_c81k30.csv
+microscopy,11.3137,2,6.346241726054872,migori_J_c81k30.csv
+microscopy,11.3137,3,10.310983584010776,migori_J_c81k30.csv
+microscopy,13.4543,0,10.978724832792638,migori_J_c81k30.csv
+microscopy,13.4543,1,12.6460659908377,migori_J_c81k30.csv
+microscopy,13.4543,2,9.573994872842443,migori_J_c81k30.csv
+microscopy,13.4543,3,11.972521822571336,migori_J_c81k30.csv
+microscopy,16.0,0,15.572243527494013,migori_J_c81k30.csv
+microscopy,16.0,1,8.459894390994714,migori_J_c81k30.csv
+microscopy,16.0,2,10.293617606769853,migori_J_c81k30.csv
+microscopy,16.0,3,12.63643282845776,migori_J_c81k30.csv
+microscopy,19.0273,0,22.023568526032445,migori_J_c81k30.csv
+microscopy,19.0273,1,18.845811217763153,migori_J_c81k30.csv
+microscopy,19.0273,2,15.539022573559715,migori_J_c81k30.csv
+microscopy,19.0273,3,12.103965767963,migori_J_c81k30.csv
+microscopy,22.6274,0,24.852325680721602,migori_J_c81k30.csv
+microscopy,22.6274,1,19.340187990893,migori_J_c81k30.csv
+microscopy,22.6274,2,23.443596337983315,migori_J_c81k30.csv
+microscopy,22.6274,3,23.48274098791611,migori_J_c81k30.csv
+microscopy,26.9087,0,25.425357813463695,migori_J_c81k30.csv
+microscopy,26.9087,1,22.542794161737657,migori_J_c81k30.csv
+microscopy,26.9087,2,48.168781544073454,migori_J_c81k30.csv
+microscopy,26.9087,3,35.81591123874679,migori_J_c81k30.csv
+microscopy,32.0,0,58.551490993236875,migori_J_c81k30.csv
+microscopy,32.0,1,31.998707531844264,migori_J_c81k30.csv
+microscopy,32.0,2,35.172115843033026,migori_J_c81k30.csv
+microscopy,32.0,3,34.164058533866886,migori_J_c81k30.csv
+RDT,1.0,0,4.757008885907471,bungoma_J_d286k2.csv
+RDT,1.0,1,6.685968324943829,bungoma_J_d286k2.csv
+RDT,1.0,2,6.419966035104589,bungoma_J_d286k2.csv
+RDT,1.0,3,5.033093502218361,bungoma_J_d286k2.csv
+RDT,1.3348,0,2.9106880490979923,bungoma_J_d286k2.csv
+RDT,1.3348,1,3.5452661242440624,bungoma_J_d286k2.csv
+RDT,1.3348,2,5.365159627949891,bungoma_J_d286k2.csv
+RDT,1.3348,3,3.8694135250155046,bungoma_J_d286k2.csv
+RDT,1.7818,0,1.4746027195053482,bungoma_J_d286k2.csv
+RDT,1.7818,1,3.703650016041004,bungoma_J_d286k2.csv
+RDT,1.7818,2,2.873063692734923,bungoma_J_d286k2.csv
+RDT,1.7818,3,2.4123508181372273,bungoma_J_d286k2.csv
+RDT,2.3784,0,0.9258578669061839,bungoma_J_d286k2.csv
+RDT,2.3784,1,0.8787552362709405,bungoma_J_d286k2.csv
+RDT,2.3784,2,0.8375239464710346,bungoma_J_d286k2.csv
+RDT,2.3784,3,0.5611649779310746,bungoma_J_d286k2.csv
+RDT,3.1748,0,0.746115039888954,bungoma_J_d286k2.csv
+RDT,3.1748,1,0.7716445463995187,bungoma_J_d286k2.csv
+RDT,3.1748,2,0.42322415656426954,bungoma_J_d286k2.csv
+RDT,3.1748,3,0.6527244178269997,bungoma_J_d286k2.csv
+RDT,4.2379,0,0.6385231658600229,bungoma_J_d286k2.csv
+RDT,4.2379,1,0.8566968545527612,bungoma_J_d286k2.csv
+RDT,4.2379,2,0.27326096451856385,bungoma_J_d286k2.csv
+RDT,4.2379,3,0.39810729555442426,bungoma_J_d286k2.csv
+RDT,5.6569,0,0.8815926041155265,bungoma_J_d286k2.csv
+RDT,5.6569,1,0.9033964883400428,bungoma_J_d286k2.csv
+RDT,5.6569,2,2.4577424226282565,bungoma_J_d286k2.csv
+RDT,5.6569,3,0.849667900435329,bungoma_J_d286k2.csv
+RDT,7.551,0,6.302077196356988,bungoma_J_d286k2.csv
+RDT,7.551,1,3.6298772410973004,bungoma_J_d286k2.csv
+RDT,7.551,2,5.7109591041878245,bungoma_J_d286k2.csv
+RDT,7.551,3,3.1711738685995723,bungoma_J_d286k2.csv
+RDT,10.0794,0,11.717867882446887,bungoma_J_d286k2.csv
+RDT,10.0794,1,9.535158677521395,bungoma_J_d286k2.csv
+RDT,10.0794,2,4.534871995450889,bungoma_J_d286k2.csv
+RDT,10.0794,3,7.220608159354956,bungoma_J_d286k2.csv
+RDT,13.4543,0,14.035284604786687,bungoma_J_d286k2.csv
+RDT,13.4543,1,15.810946040920747,bungoma_J_d286k2.csv
+RDT,13.4543,2,13.092612982712236,bungoma_J_d286k2.csv
+RDT,13.4543,3,12.369017668933507,bungoma_J_d286k2.csv
+RDT,17.9594,0,21.58845198082404,bungoma_J_d286k2.csv
+RDT,17.9594,1,15.6155249931889,bungoma_J_d286k2.csv
+RDT,17.9594,2,11.710346117781164,bungoma_J_d286k2.csv
+RDT,17.9594,3,18.789466753028034,bungoma_J_d286k2.csv
+RDT,23.9729,0,21.585085024354857,bungoma_J_d286k2.csv
+RDT,23.9729,1,22.547363322816643,bungoma_J_d286k2.csv
+RDT,23.9729,2,26.712287313542454,bungoma_J_d286k2.csv
+RDT,23.9729,3,28.666681504039797,bungoma_J_d286k2.csv
+RDT,32.0,0,26.949224327188677,bungoma_J_d286k2.csv
+RDT,32.0,1,27.09098704243634,bungoma_J_d286k2.csv
+RDT,32.0,2,35.067169658508064,bungoma_J_d286k2.csv
+RDT,32.0,3,29.51842792470145,bungoma_J_d286k2.csv
+microscopy,1.0,0,0.6956256768519353,bungoma_J_d286k2.csv
+microscopy,1.0,1,1.7783052554364995,bungoma_J_d286k2.csv
+microscopy,1.0,2,1.4072818089908605,bungoma_J_d286k2.csv
+microscopy,1.0,3,0.7246029265566536,bungoma_J_d286k2.csv
+microscopy,1.3348,0,0.3713384914647632,bungoma_J_d286k2.csv
+microscopy,1.3348,1,0.34920742349709344,bungoma_J_d286k2.csv
+microscopy,1.3348,2,0.7032456702372627,bungoma_J_d286k2.csv
+microscopy,1.3348,3,0.5025392589270302,bungoma_J_d286k2.csv
+microscopy,1.7818,0,1.9979649236210952,bungoma_J_d286k2.csv
+microscopy,1.7818,1,1.3108570227737077,bungoma_J_d286k2.csv
+microscopy,1.7818,2,0.5642030448691938,bungoma_J_d286k2.csv
+microscopy,1.7818,3,0.46321073712807465,bungoma_J_d286k2.csv
+microscopy,2.3784,0,4.042307001126985,bungoma_J_d286k2.csv
+microscopy,2.3784,1,4.104480328029281,bungoma_J_d286k2.csv
+microscopy,2.3784,2,3.967102990473139,bungoma_J_d286k2.csv
+microscopy,2.3784,3,6.123122948695876,bungoma_J_d286k2.csv
+microscopy,3.1748,0,5.7355892830907855,bungoma_J_d286k2.csv
+microscopy,3.1748,1,4.726105159505242,bungoma_J_d286k2.csv
+microscopy,3.1748,2,6.958724431565042,bungoma_J_d286k2.csv
+microscopy,3.1748,3,9.113873672746859,bungoma_J_d286k2.csv
+microscopy,4.2379,0,10.0935936986791,bungoma_J_d286k2.csv
+microscopy,4.2379,1,13.064400349638312,bungoma_J_d286k2.csv
+microscopy,4.2379,2,17.279840412622153,bungoma_J_d286k2.csv
+microscopy,4.2379,3,10.667371437566029,bungoma_J_d286k2.csv
+microscopy,5.6569,0,21.150269468320765,bungoma_J_d286k2.csv
+microscopy,5.6569,1,17.785526129622106,bungoma_J_d286k2.csv
+microscopy,5.6569,2,31.955276600190093,bungoma_J_d286k2.csv
+microscopy,5.6569,3,18.5768971551173,bungoma_J_d286k2.csv
+microscopy,7.551,0,35.508583203031186,bungoma_J_d286k2.csv
+microscopy,7.551,1,35.406180618684495,bungoma_J_d286k2.csv
+microscopy,7.551,2,42.79624125581026,bungoma_J_d286k2.csv
+microscopy,7.551,3,33.04514614595044,bungoma_J_d286k2.csv
+microscopy,10.0794,0,68.91870592997574,bungoma_J_d286k2.csv
+microscopy,10.0794,1,59.9290254964435,bungoma_J_d286k2.csv
+microscopy,10.0794,2,44.67108854582275,bungoma_J_d286k2.csv
+microscopy,10.0794,3,46.82184717707736,bungoma_J_d286k2.csv
+microscopy,13.4543,0,79.4482720499675,bungoma_J_d286k2.csv
+microscopy,13.4543,1,84.9473049144307,bungoma_J_d286k2.csv
+microscopy,13.4543,2,72.78349688456915,bungoma_J_d286k2.csv
+microscopy,13.4543,3,72.79754633246168,bungoma_J_d286k2.csv
+microscopy,17.9594,0,102.67127916017637,bungoma_J_d286k2.csv
+microscopy,17.9594,1,104.14909030286472,bungoma_J_d286k2.csv
+microscopy,17.9594,2,72.70921515630033,bungoma_J_d286k2.csv
+microscopy,17.9594,3,99.97858631894113,bungoma_J_d286k2.csv
+microscopy,23.9729,0,115.72068520221073,bungoma_J_d286k2.csv
+microscopy,23.9729,1,119.53911729225712,bungoma_J_d286k2.csv
+microscopy,23.9729,2,121.38347678387112,bungoma_J_d286k2.csv
+microscopy,23.9729,3,146.61530026127366,bungoma_J_d286k2.csv
+microscopy,32.0,0,140.93351580389736,bungoma_J_d286k2.csv
+microscopy,32.0,1,146.7890990440957,bungoma_J_d286k2.csv
+microscopy,32.0,2,162.69744938970933,bungoma_J_d286k2.csv
+microscopy,32.0,3,156.80973611572927,bungoma_J_d286k2.csv
+RDT,0.5,0,10.404984810207283,bungoma_J_b2.csv
+RDT,0.5,1,9.041091164594455,bungoma_J_b2.csv
+RDT,0.5,2,10.513126536578756,bungoma_J_b2.csv
+RDT,0.5,3,8.866517505358633,bungoma_J_b2.csv
+RDT,0.63,0,8.748987066611214,bungoma_J_b2.csv
+RDT,0.63,1,7.9805333584177,bungoma_J_b2.csv
+RDT,0.63,2,8.975218217989234,bungoma_J_b2.csv
+RDT,0.63,3,8.882006514125594,bungoma_J_b2.csv
+RDT,0.7937,0,6.1471295272552275,bungoma_J_b2.csv
+RDT,0.7937,1,6.943191174997004,bungoma_J_b2.csv
+RDT,0.7937,2,6.731576854575869,bungoma_J_b2.csv
+RDT,0.7937,3,7.109817587300816,bungoma_J_b2.csv
+RDT,1.0,0,5.05339000504717,bungoma_J_b2.csv
+RDT,1.0,1,4.2739451042678365,bungoma_J_b2.csv
+RDT,1.0,2,6.153700214633156,bungoma_J_b2.csv
+RDT,1.0,3,5.920449248040727,bungoma_J_b2.csv
+RDT,1.2599,0,3.4554175395586118,bungoma_J_b2.csv
+RDT,1.2599,1,3.37987554502137,bungoma_J_b2.csv
+RDT,1.2599,2,2.538873678490009,bungoma_J_b2.csv
+RDT,1.2599,3,4.251257205132641,bungoma_J_b2.csv
+RDT,1.5874,0,2.1602132698947267,bungoma_J_b2.csv
+RDT,1.5874,1,2.225029521193496,bungoma_J_b2.csv
+RDT,1.5874,2,3.2443484826820534,bungoma_J_b2.csv
+RDT,1.5874,3,2.2166127965634366,bungoma_J_b2.csv
+RDT,2.0,0,2.184433074517808,bungoma_J_b2.csv
+RDT,2.0,1,0.9262809263205325,bungoma_J_b2.csv
+RDT,2.0,2,1.8531883450964215,bungoma_J_b2.csv
+RDT,2.0,3,1.290463398776892,bungoma_J_b2.csv
+RDT,2.5198,0,1.1916140718961186,bungoma_J_b2.csv
+RDT,2.5198,1,1.0524718499587624,bungoma_J_b2.csv
+RDT,2.5198,2,0.9183436601782915,bungoma_J_b2.csv
+RDT,2.5198,3,0.7503677466087847,bungoma_J_b2.csv
+RDT,3.1748,0,0.8082149584973903,bungoma_J_b2.csv
+RDT,3.1748,1,0.530440225741904,bungoma_J_b2.csv
+RDT,3.1748,2,0.2512027952332794,bungoma_J_b2.csv
+RDT,3.1748,3,0.320011873208635,bungoma_J_b2.csv
+RDT,4.0,0,1.3543279679802254,bungoma_J_b2.csv
+RDT,4.0,1,1.2936909131930139,bungoma_J_b2.csv
+RDT,4.0,2,0.24509319477757568,bungoma_J_b2.csv
+RDT,4.0,3,0.8667527114722604,bungoma_J_b2.csv
+RDT,5.0397,0,1.2449849572350984,bungoma_J_b2.csv
+RDT,5.0397,1,1.8738697802683382,bungoma_J_b2.csv
+RDT,5.0397,2,1.2882255419089876,bungoma_J_b2.csv
+RDT,5.0397,3,0.6605747140535738,bungoma_J_b2.csv
+RDT,6.3496,0,2.3146968655394744,bungoma_J_b2.csv
+RDT,6.3496,1,2.366984794082729,bungoma_J_b2.csv
+RDT,6.3496,2,5.498212320034217,bungoma_J_b2.csv
+RDT,6.3496,3,5.165903472189207,bungoma_J_b2.csv
+RDT,8.0,0,4.066326597058048,bungoma_J_b2.csv
+RDT,8.0,1,5.736884705084588,bungoma_J_b2.csv
+RDT,8.0,2,6.351661935505145,bungoma_J_b2.csv
+RDT,8.0,3,4.373566328714698,bungoma_J_b2.csv
+microscopy,0.5,0,5.092334850467175,bungoma_J_b2.csv
+microscopy,0.5,1,3.6316960396892624,bungoma_J_b2.csv
+microscopy,0.5,2,5.605164077434534,bungoma_J_b2.csv
+microscopy,0.5,3,3.216561325324114,bungoma_J_b2.csv
+microscopy,0.63,0,3.4320636769262527,bungoma_J_b2.csv
+microscopy,0.63,1,3.1578086785397073,bungoma_J_b2.csv
+microscopy,0.63,2,4.003058697268201,bungoma_J_b2.csv
+microscopy,0.63,3,3.682423710765261,bungoma_J_b2.csv
+microscopy,0.7937,0,2.1984630416896254,bungoma_J_b2.csv
+microscopy,0.7937,1,2.0484517471742043,bungoma_J_b2.csv
+microscopy,0.7937,2,2.012618478567107,bungoma_J_b2.csv
+microscopy,0.7937,3,2.1056358120153456,bungoma_J_b2.csv
+microscopy,1.0,0,0.5141642390456022,bungoma_J_b2.csv
+microscopy,1.0,1,0.6740885126601397,bungoma_J_b2.csv
+microscopy,1.0,2,1.4873583040094192,bungoma_J_b2.csv
+microscopy,1.0,3,1.6296003122259546,bungoma_J_b2.csv
+microscopy,1.2599,0,0.3939939223504375,bungoma_J_b2.csv
+microscopy,1.2599,1,0.717874769417306,bungoma_J_b2.csv
+microscopy,1.2599,2,0.5229717278932872,bungoma_J_b2.csv
+microscopy,1.2599,3,0.3051970252856326,bungoma_J_b2.csv
+microscopy,1.5874,0,0.8564068409481231,bungoma_J_b2.csv
+microscopy,1.5874,1,1.1563805028793734,bungoma_J_b2.csv
+microscopy,1.5874,2,1.205122847565247,bungoma_J_b2.csv
+microscopy,1.5874,3,1.7954192263817625,bungoma_J_b2.csv
+microscopy,2.0,0,1.5559912364586757,bungoma_J_b2.csv
+microscopy,2.0,1,5.277684389726204,bungoma_J_b2.csv
+microscopy,2.0,2,3.0027303208659917,bungoma_J_b2.csv
+microscopy,2.0,3,2.6770189747208284,bungoma_J_b2.csv
+microscopy,2.5198,0,2.838438055504054,bungoma_J_b2.csv
+microscopy,2.5198,1,3.47636632274131,bungoma_J_b2.csv
+microscopy,2.5198,2,4.711860899676823,bungoma_J_b2.csv
+microscopy,2.5198,3,4.511401942940551,bungoma_J_b2.csv
+microscopy,3.1748,0,6.251089018233918,bungoma_J_b2.csv
+microscopy,3.1748,1,10.418161128689711,bungoma_J_b2.csv
+microscopy,3.1748,2,8.08007341633854,bungoma_J_b2.csv
+microscopy,3.1748,3,9.069561540150463,bungoma_J_b2.csv
+microscopy,4.0,0,14.16858751195463,bungoma_J_b2.csv
+microscopy,4.0,1,12.347891668170368,bungoma_J_b2.csv
+microscopy,4.0,2,10.632469701473573,bungoma_J_b2.csv
+microscopy,4.0,3,14.000726923058298,bungoma_J_b2.csv
+microscopy,5.0397,0,18.47288843259555,bungoma_J_b2.csv
+microscopy,5.0397,1,15.334447348189642,bungoma_J_b2.csv
+microscopy,5.0397,2,14.014700726304735,bungoma_J_b2.csv
+microscopy,5.0397,3,13.315354202043157,bungoma_J_b2.csv
+microscopy,6.3496,0,27.69198393166046,bungoma_J_b2.csv
+microscopy,6.3496,1,25.857833621825613,bungoma_J_b2.csv
+microscopy,6.3496,2,40.99547472628045,bungoma_J_b2.csv
+microscopy,6.3496,3,37.656987704835736,bungoma_J_b2.csv
+microscopy,8.0,0,36.683523427183744,bungoma_J_b2.csv
+microscopy,8.0,1,39.57278155042269,bungoma_J_b2.csv
+microscopy,8.0,2,44.7518501770489,bungoma_J_b2.csv
+microscopy,8.0,3,38.12098229436074,bungoma_J_b2.csv
+RDT,2.0,0,25.063971858570095,homa bay_J_hbA_c95k50.csv
+RDT,2.0,1,19.003303981026985,homa bay_J_hbA_c95k50.csv
+RDT,2.0,2,16.93827152515091,homa bay_J_hbA_c95k50.csv
+RDT,2.0,3,30.270860093333265,homa bay_J_hbA_c95k50.csv
+RDT,2.5198,0,20.342461096293214,homa bay_J_hbA_c95k50.csv
+RDT,2.5198,1,17.162852889614115,homa bay_J_hbA_c95k50.csv
+RDT,2.5198,2,14.764699832158815,homa bay_J_hbA_c95k50.csv
+RDT,2.5198,3,14.414410363188313,homa bay_J_hbA_c95k50.csv
+RDT,3.1748,0,6.610137257762792,homa bay_J_hbA_c95k50.csv
+RDT,3.1748,1,15.234760750597108,homa bay_J_hbA_c95k50.csv
+RDT,3.1748,2,10.472810854989504,homa bay_J_hbA_c95k50.csv
+RDT,3.1748,3,10.556243013562113,homa bay_J_hbA_c95k50.csv
+RDT,4.0,0,0.3485838754606995,homa bay_J_hbA_c95k50.csv
+RDT,4.0,1,2.02302051901615,homa bay_J_hbA_c95k50.csv
+RDT,4.0,2,8.351052242114617,homa bay_J_hbA_c95k50.csv
+RDT,4.0,3,1.7675779259769306,homa bay_J_hbA_c95k50.csv
+RDT,5.0397,0,10.287463066093483,homa bay_J_hbA_c95k50.csv
+RDT,5.0397,1,87.1246273752073,homa bay_J_hbA_c95k50.csv
+RDT,5.0397,2,53.19149158597037,homa bay_J_hbA_c95k50.csv
+RDT,5.0397,3,0.1520460362589055,homa bay_J_hbA_c95k50.csv
+RDT,6.3496,0,51.77918204806527,homa bay_J_hbA_c95k50.csv
+RDT,6.3496,1,14.488588372086706,homa bay_J_hbA_c95k50.csv
+RDT,6.3496,2,61.77592870461889,homa bay_J_hbA_c95k50.csv
+RDT,6.3496,3,136.43245552060378,homa bay_J_hbA_c95k50.csv
+RDT,8.0,0,161.02566875782423,homa bay_J_hbA_c95k50.csv
+RDT,8.0,1,82.0625434684214,homa bay_J_hbA_c95k50.csv
+RDT,8.0,2,82.2207353392795,homa bay_J_hbA_c95k50.csv
+RDT,8.0,3,128.00702279120173,homa bay_J_hbA_c95k50.csv
+RDT,10.0794,0,122.52417801859775,homa bay_J_hbA_c95k50.csv
+RDT,10.0794,1,204.8870869705755,homa bay_J_hbA_c95k50.csv
+RDT,10.0794,2,51.490169826331254,homa bay_J_hbA_c95k50.csv
+RDT,10.0794,3,137.07179106971918,homa bay_J_hbA_c95k50.csv
+RDT,12.6992,0,241.82975637703234,homa bay_J_hbA_c95k50.csv
+RDT,12.6992,1,293.72950904882964,homa bay_J_hbA_c95k50.csv
+RDT,12.6992,2,222.22542033693506,homa bay_J_hbA_c95k50.csv
+RDT,12.6992,3,242.67600623039885,homa bay_J_hbA_c95k50.csv
+RDT,16.0,0,336.74746928798106,homa bay_J_hbA_c95k50.csv
+RDT,16.0,1,429.56930869567555,homa bay_J_hbA_c95k50.csv
+RDT,16.0,2,365.4311990164006,homa bay_J_hbA_c95k50.csv
+RDT,16.0,3,452.6371891338481,homa bay_J_hbA_c95k50.csv
+RDT,20.1587,0,474.3353212618193,homa bay_J_hbA_c95k50.csv
+RDT,20.1587,1,538.6962567530431,homa bay_J_hbA_c95k50.csv
+RDT,20.1587,2,371.14623932902884,homa bay_J_hbA_c95k50.csv
+RDT,20.1587,3,514.5072440438393,homa bay_J_hbA_c95k50.csv
+RDT,25.3984,0,502.5078461988248,homa bay_J_hbA_c95k50.csv
+RDT,25.3984,1,571.7144053117403,homa bay_J_hbA_c95k50.csv
+RDT,25.3984,2,539.1781218313275,homa bay_J_hbA_c95k50.csv
+RDT,25.3984,3,632.5374707411074,homa bay_J_hbA_c95k50.csv
+RDT,32.0,0,680.9562558817719,homa bay_J_hbA_c95k50.csv
+RDT,32.0,1,774.6998709349526,homa bay_J_hbA_c95k50.csv
+RDT,32.0,2,690.3172976499441,homa bay_J_hbA_c95k50.csv
+RDT,32.0,3,774.7630609998154,homa bay_J_hbA_c95k50.csv
+microscopy,2.0,0,6.4676450123585685,homa bay_J_hbA_c95k50.csv
+microscopy,2.0,1,4.8478162198973305,homa bay_J_hbA_c95k50.csv
+microscopy,2.0,2,4.342024201719202,homa bay_J_hbA_c95k50.csv
+microscopy,2.0,3,7.818141167648793,homa bay_J_hbA_c95k50.csv
+microscopy,2.5198,0,5.121446172410459,homa bay_J_hbA_c95k50.csv
+microscopy,2.5198,1,3.7910875729634004,homa bay_J_hbA_c95k50.csv
+microscopy,2.5198,2,4.036629724498428,homa bay_J_hbA_c95k50.csv
+microscopy,2.5198,3,4.3234632613464985,homa bay_J_hbA_c95k50.csv
+microscopy,3.1748,0,0.9047862597339058,homa bay_J_hbA_c95k50.csv
+microscopy,3.1748,1,4.309227739458713,homa bay_J_hbA_c95k50.csv
+microscopy,3.1748,2,3.3029136982836786,homa bay_J_hbA_c95k50.csv
+microscopy,3.1748,3,3.4416822402205574,homa bay_J_hbA_c95k50.csv
+microscopy,4.0,0,0.1092542776960982,homa bay_J_hbA_c95k50.csv
+microscopy,4.0,1,0.8288961771274335,homa bay_J_hbA_c95k50.csv
+microscopy,4.0,2,3.592486294522958,homa bay_J_hbA_c95k50.csv
+microscopy,4.0,3,0.1110822909046969,homa bay_J_hbA_c95k50.csv
+microscopy,5.0397,0,6.410541894536034,homa bay_J_hbA_c95k50.csv
+microscopy,5.0397,1,63.58420691475475,homa bay_J_hbA_c95k50.csv
+microscopy,5.0397,2,36.414681725505794,homa bay_J_hbA_c95k50.csv
+microscopy,5.0397,3,0.14869329178864904,homa bay_J_hbA_c95k50.csv
+microscopy,6.3496,0,40.89556985559318,homa bay_J_hbA_c95k50.csv
+microscopy,6.3496,1,10.47158603388349,homa bay_J_hbA_c95k50.csv
+microscopy,6.3496,2,45.40281982396804,homa bay_J_hbA_c95k50.csv
+microscopy,6.3496,3,100.53962371854674,homa bay_J_hbA_c95k50.csv
+microscopy,8.0,0,119.75735785933263,homa bay_J_hbA_c95k50.csv
+microscopy,8.0,1,60.38089595190266,homa bay_J_hbA_c95k50.csv
+microscopy,8.0,2,62.61949746243019,homa bay_J_hbA_c95k50.csv
+microscopy,8.0,3,93.20995110954229,homa bay_J_hbA_c95k50.csv
+microscopy,10.0794,0,89.9239403197407,homa bay_J_hbA_c95k50.csv
+microscopy,10.0794,1,150.3585192463226,homa bay_J_hbA_c95k50.csv
+microscopy,10.0794,2,35.64798877474657,homa bay_J_hbA_c95k50.csv
+microscopy,10.0794,3,104.51345675049993,homa bay_J_hbA_c95k50.csv
+microscopy,12.6992,0,180.4696607768319,homa bay_J_hbA_c95k50.csv
+microscopy,12.6992,1,216.36603712921027,homa bay_J_hbA_c95k50.csv
+microscopy,12.6992,2,166.33115666457613,homa bay_J_hbA_c95k50.csv
+microscopy,12.6992,3,182.79971908427362,homa bay_J_hbA_c95k50.csv
+microscopy,16.0,0,247.24508928633372,homa bay_J_hbA_c95k50.csv
+microscopy,16.0,1,313.33848281682486,homa bay_J_hbA_c95k50.csv
+microscopy,16.0,2,262.85724702262394,homa bay_J_hbA_c95k50.csv
+microscopy,16.0,3,324.0007728575796,homa bay_J_hbA_c95k50.csv
+microscopy,20.1587,0,339.36452457943096,homa bay_J_hbA_c95k50.csv
+microscopy,20.1587,1,379.3235786210795,homa bay_J_hbA_c95k50.csv
+microscopy,20.1587,2,259.65962566240285,homa bay_J_hbA_c95k50.csv
+microscopy,20.1587,3,374.5812797804573,homa bay_J_hbA_c95k50.csv
+microscopy,25.3984,0,366.7669962896731,homa bay_J_hbA_c95k50.csv
+microscopy,25.3984,1,402.8969714400692,homa bay_J_hbA_c95k50.csv
+microscopy,25.3984,2,390.4399344489441,homa bay_J_hbA_c95k50.csv
+microscopy,25.3984,3,436.83722972559286,homa bay_J_hbA_c95k50.csv
+microscopy,32.0,0,467.0895683050917,homa bay_J_hbA_c95k50.csv
+microscopy,32.0,1,527.6137637360066,homa bay_J_hbA_c95k50.csv
+microscopy,32.0,2,481.2628264069529,homa bay_J_hbA_c95k50.csv
+microscopy,32.0,3,526.8279989113339,homa bay_J_hbA_c95k50.csv
+RDT,3.1748,0,6.610137257762792,homa bay_J_hbA_s10_k5.csv
+RDT,3.1748,1,15.234760750597108,homa bay_J_hbA_s10_k5.csv
+RDT,3.1748,2,10.472810854989504,homa bay_J_hbA_s10_k5.csv
+RDT,3.1748,3,10.556243013562113,homa bay_J_hbA_s10_k5.csv
+RDT,3.1748,4,16.37724390182535,homa bay_J_hbA_s10_k5.csv
+RDT,3.1748,5,13.677461156126565,homa bay_J_hbA_s10_k5.csv
+RDT,3.1748,6,15.708474610681417,homa bay_J_hbA_s10_k5.csv
+RDT,3.1748,7,2.3519738599735254,homa bay_J_hbA_s10_k5.csv
+RDT,3.1748,8,8.035379118379991,homa bay_J_hbA_s10_k5.csv
+RDT,3.1748,9,12.330389062670658,homa bay_J_hbA_s10_k5.csv
+RDT,4.0,0,0.3485838754606995,homa bay_J_hbA_s10_k5.csv
+RDT,4.0,1,2.02302051901615,homa bay_J_hbA_s10_k5.csv
+RDT,4.0,2,8.351052242114617,homa bay_J_hbA_s10_k5.csv
+RDT,4.0,3,1.7675779259769306,homa bay_J_hbA_s10_k5.csv
+RDT,4.0,4,7.568537142574198,homa bay_J_hbA_s10_k5.csv
+RDT,4.0,5,7.93741964270205,homa bay_J_hbA_s10_k5.csv
+RDT,4.0,6,5.142761781574459,homa bay_J_hbA_s10_k5.csv
+RDT,4.0,7,1.7182615679622222,homa bay_J_hbA_s10_k5.csv
+RDT,4.0,8,9.660669974780031,homa bay_J_hbA_s10_k5.csv
+RDT,4.0,9,7.7921494998892,homa bay_J_hbA_s10_k5.csv
+RDT,5.0397,0,10.287463066093483,homa bay_J_hbA_s10_k5.csv
+RDT,5.0397,1,87.1246273752073,homa bay_J_hbA_s10_k5.csv
+RDT,5.0397,2,53.19149158597037,homa bay_J_hbA_s10_k5.csv
+RDT,5.0397,3,0.1520460362589055,homa bay_J_hbA_s10_k5.csv
+RDT,5.0397,4,47.1950930255698,homa bay_J_hbA_s10_k5.csv
+RDT,5.0397,5,23.280755928930482,homa bay_J_hbA_s10_k5.csv
+RDT,5.0397,6,11.593257823508996,homa bay_J_hbA_s10_k5.csv
+RDT,5.0397,7,0.7357478068000698,homa bay_J_hbA_s10_k5.csv
+RDT,5.0397,8,17.009673460072825,homa bay_J_hbA_s10_k5.csv
+RDT,5.0397,9,17.662050443331363,homa bay_J_hbA_s10_k5.csv
+microscopy,3.1748,0,0.9047862597339058,homa bay_J_hbA_s10_k5.csv
+microscopy,3.1748,1,4.309227739458713,homa bay_J_hbA_s10_k5.csv
+microscopy,3.1748,2,3.3029136982836786,homa bay_J_hbA_s10_k5.csv
+microscopy,3.1748,3,3.4416822402205574,homa bay_J_hbA_s10_k5.csv
+microscopy,3.1748,4,4.430110825633196,homa bay_J_hbA_s10_k5.csv
+microscopy,3.1748,5,3.8391854723975563,homa bay_J_hbA_s10_k5.csv
+microscopy,3.1748,6,7.4591357495359105,homa bay_J_hbA_s10_k5.csv
+microscopy,3.1748,7,1.0003196892842272,homa bay_J_hbA_s10_k5.csv
+microscopy,3.1748,8,3.816807870496833,homa bay_J_hbA_s10_k5.csv
+microscopy,3.1748,9,3.8501320699589416,homa bay_J_hbA_s10_k5.csv
+microscopy,4.0,0,0.1092542776960982,homa bay_J_hbA_s10_k5.csv
+microscopy,4.0,1,0.8288961771274335,homa bay_J_hbA_s10_k5.csv
+microscopy,4.0,2,3.592486294522958,homa bay_J_hbA_s10_k5.csv
+microscopy,4.0,3,0.1110822909046969,homa bay_J_hbA_s10_k5.csv
+microscopy,4.0,4,3.390150356023039,homa bay_J_hbA_s10_k5.csv
+microscopy,4.0,5,3.6698441062137266,homa bay_J_hbA_s10_k5.csv
+microscopy,4.0,6,0.5735305077498286,homa bay_J_hbA_s10_k5.csv
+microscopy,4.0,7,0.25718874160444233,homa bay_J_hbA_s10_k5.csv
+microscopy,4.0,8,6.120283861833782,homa bay_J_hbA_s10_k5.csv
+microscopy,4.0,9,3.9836498104442333,homa bay_J_hbA_s10_k5.csv
+microscopy,5.0397,0,6.410541894536034,homa bay_J_hbA_s10_k5.csv
+microscopy,5.0397,1,63.58420691475475,homa bay_J_hbA_s10_k5.csv
+microscopy,5.0397,2,36.414681725505794,homa bay_J_hbA_s10_k5.csv
+microscopy,5.0397,3,0.14869329178864904,homa bay_J_hbA_s10_k5.csv
+microscopy,5.0397,4,35.08714151482321,homa bay_J_hbA_s10_k5.csv
+microscopy,5.0397,5,16.82769735188466,homa bay_J_hbA_s10_k5.csv
+microscopy,5.0397,6,6.9322939152142675,homa bay_J_hbA_s10_k5.csv
+microscopy,5.0397,7,0.8601388744821621,homa bay_J_hbA_s10_k5.csv
+microscopy,5.0397,8,11.599450242131683,homa bay_J_hbA_s10_k5.csv
+microscopy,5.0397,9,10.32523533303732,homa bay_J_hbA_s10_k5.csv
+RDT,3.1748,0,14.001292586346226,homa bay_J_hbA_s10_k6.csv
+RDT,3.1748,1,8.598735619031794,homa bay_J_hbA_s10_k6.csv
+RDT,3.1748,2,6.077180549436416,homa bay_J_hbA_s10_k6.csv
+RDT,3.1748,3,8.310123148804452,homa bay_J_hbA_s10_k6.csv
+RDT,3.1748,4,17.32914232091823,homa bay_J_hbA_s10_k6.csv
+RDT,3.1748,5,14.264590220963182,homa bay_J_hbA_s10_k6.csv
+RDT,3.1748,6,12.142108730013117,homa bay_J_hbA_s10_k6.csv
+RDT,3.1748,7,7.805936461489859,homa bay_J_hbA_s10_k6.csv
+RDT,3.1748,8,7.677892141059299,homa bay_J_hbA_s10_k6.csv
+RDT,3.1748,9,12.212468803817515,homa bay_J_hbA_s10_k6.csv
+RDT,4.0,0,7.318887806421585,homa bay_J_hbA_s10_k6.csv
+RDT,4.0,1,5.201692449740113,homa bay_J_hbA_s10_k6.csv
+RDT,4.0,2,7.3556654680943065,homa bay_J_hbA_s10_k6.csv
+RDT,4.0,3,8.270876295685426,homa bay_J_hbA_s10_k6.csv
+RDT,4.0,4,7.3632937832951155,homa bay_J_hbA_s10_k6.csv
+RDT,4.0,5,7.979783589275143,homa bay_J_hbA_s10_k6.csv
+RDT,4.0,6,8.097375237768988,homa bay_J_hbA_s10_k6.csv
+RDT,4.0,7,8.319087933879743,homa bay_J_hbA_s10_k6.csv
+RDT,4.0,8,5.048542335142445,homa bay_J_hbA_s10_k6.csv
+RDT,4.0,9,7.7921494998892,homa bay_J_hbA_s10_k6.csv
+RDT,5.0397,0,7.5519706303073955,homa bay_J_hbA_s10_k6.csv
+RDT,5.0397,1,67.6775621170115,homa bay_J_hbA_s10_k6.csv
+RDT,5.0397,2,4.987343841341393,homa bay_J_hbA_s10_k6.csv
+RDT,5.0397,3,7.320703846684978,homa bay_J_hbA_s10_k6.csv
+RDT,5.0397,4,7.827760706749026,homa bay_J_hbA_s10_k6.csv
+RDT,5.0397,5,7.953975593512694,homa bay_J_hbA_s10_k6.csv
+RDT,5.0397,6,9.639461269471685,homa bay_J_hbA_s10_k6.csv
+RDT,5.0397,7,6.482849405613854,homa bay_J_hbA_s10_k6.csv
+RDT,5.0397,8,4.834604806570319,homa bay_J_hbA_s10_k6.csv
+RDT,5.0397,9,1.10213577186583,homa bay_J_hbA_s10_k6.csv
+microscopy,3.1748,0,4.202282065344686,homa bay_J_hbA_s10_k6.csv
+microscopy,3.1748,1,1.2907528070935808,homa bay_J_hbA_s10_k6.csv
+microscopy,3.1748,2,1.3206437412802718,homa bay_J_hbA_s10_k6.csv
+microscopy,3.1748,3,1.4875456663125837,homa bay_J_hbA_s10_k6.csv
+microscopy,3.1748,4,4.814357850834771,homa bay_J_hbA_s10_k6.csv
+microscopy,3.1748,5,4.164908732367735,homa bay_J_hbA_s10_k6.csv
+microscopy,3.1748,6,3.2064015319932158,homa bay_J_hbA_s10_k6.csv
+microscopy,3.1748,7,3.042610528575845,homa bay_J_hbA_s10_k6.csv
+microscopy,3.1748,8,3.65464428575579,homa bay_J_hbA_s10_k6.csv
+microscopy,3.1748,9,3.810090058691331,homa bay_J_hbA_s10_k6.csv
+microscopy,4.0,0,3.360602444542341,homa bay_J_hbA_s10_k6.csv
+microscopy,4.0,1,2.0717433488408887,homa bay_J_hbA_s10_k6.csv
+microscopy,4.0,2,3.0426899563495633,homa bay_J_hbA_s10_k6.csv
+microscopy,4.0,3,3.3051775242553187,homa bay_J_hbA_s10_k6.csv
+microscopy,4.0,4,3.476930474005059,homa bay_J_hbA_s10_k6.csv
+microscopy,4.0,5,3.708652132038782,homa bay_J_hbA_s10_k6.csv
+microscopy,4.0,6,1.9723053620933748,homa bay_J_hbA_s10_k6.csv
+microscopy,4.0,7,3.4884699887277333,homa bay_J_hbA_s10_k6.csv
+microscopy,4.0,8,1.9706031925533067,homa bay_J_hbA_s10_k6.csv
+microscopy,4.0,9,3.9836498104442333,homa bay_J_hbA_s10_k6.csv
+microscopy,5.0397,0,3.3160530603090743,homa bay_J_hbA_s10_k6.csv
+microscopy,5.0397,1,49.424209278041836,homa bay_J_hbA_s10_k6.csv
+microscopy,5.0397,2,3.221540757961561,homa bay_J_hbA_s10_k6.csv
+microscopy,5.0397,3,3.537706642715967,homa bay_J_hbA_s10_k6.csv
+microscopy,5.0397,4,4.409114566348416,homa bay_J_hbA_s10_k6.csv
+microscopy,5.0397,5,4.73655242037951,homa bay_J_hbA_s10_k6.csv
+microscopy,5.0397,6,3.592192354176085,homa bay_J_hbA_s10_k6.csv
+microscopy,5.0397,7,3.4829266774761587,homa bay_J_hbA_s10_k6.csv
+microscopy,5.0397,8,2.081645838632389,homa bay_J_hbA_s10_k6.csv
+microscopy,5.0397,9,0.0964043360475045,homa bay_J_hbA_s10_k6.csv
+RDT,3.1748,0,13.767782452051442,homa bay_J_hbA_s10_k7.csv
+RDT,3.1748,1,15.967282806321485,homa bay_J_hbA_s10_k7.csv
+RDT,3.1748,2,10.887225098829058,homa bay_J_hbA_s10_k7.csv
+RDT,3.1748,3,13.541251424331639,homa bay_J_hbA_s10_k7.csv
+RDT,3.1748,4,17.070358926041546,homa bay_J_hbA_s10_k7.csv
+RDT,3.1748,5,13.662078789216583,homa bay_J_hbA_s10_k7.csv
+RDT,3.1748,6,13.918583375985623,homa bay_J_hbA_s10_k7.csv
+RDT,3.1748,7,8.261485802263506,homa bay_J_hbA_s10_k7.csv
+RDT,3.1748,8,6.82612932865967,homa bay_J_hbA_s10_k7.csv
+RDT,3.1748,9,12.330389062670658,homa bay_J_hbA_s10_k7.csv
+RDT,4.0,0,6.9426076421575385,homa bay_J_hbA_s10_k7.csv
+RDT,4.0,1,7.726241283282921,homa bay_J_hbA_s10_k7.csv
+RDT,4.0,2,8.336222865490397,homa bay_J_hbA_s10_k7.csv
+RDT,4.0,3,9.103598291954242,homa bay_J_hbA_s10_k7.csv
+RDT,4.0,4,7.428318866968369,homa bay_J_hbA_s10_k7.csv
+RDT,4.0,5,7.464797463191096,homa bay_J_hbA_s10_k7.csv
+RDT,4.0,6,12.316870366776364,homa bay_J_hbA_s10_k7.csv
+RDT,4.0,7,8.47304196288005,homa bay_J_hbA_s10_k7.csv
+RDT,4.0,8,1.6717230195651145,homa bay_J_hbA_s10_k7.csv
+RDT,4.0,9,7.7921494998892,homa bay_J_hbA_s10_k7.csv
+RDT,5.0397,0,8.122199890607936,homa bay_J_hbA_s10_k7.csv
+RDT,5.0397,1,7.605738724508887,homa bay_J_hbA_s10_k7.csv
+RDT,5.0397,2,0.4751050998410451,homa bay_J_hbA_s10_k7.csv
+RDT,5.0397,3,6.148204906197574,homa bay_J_hbA_s10_k7.csv
+RDT,5.0397,4,13.59560980549103,homa bay_J_hbA_s10_k7.csv
+RDT,5.0397,5,7.669784255932189,homa bay_J_hbA_s10_k7.csv
+RDT,5.0397,6,7.833952937161631,homa bay_J_hbA_s10_k7.csv
+RDT,5.0397,7,7.746863992865443,homa bay_J_hbA_s10_k7.csv
+RDT,5.0397,8,8.604545035960012,homa bay_J_hbA_s10_k7.csv
+RDT,5.0397,9,8.63691638791307,homa bay_J_hbA_s10_k7.csv
+microscopy,3.1748,0,4.083399183071923,homa bay_J_hbA_s10_k7.csv
+microscopy,3.1748,1,4.7073290510127475,homa bay_J_hbA_s10_k7.csv
+microscopy,3.1748,2,3.5712047443524435,homa bay_J_hbA_s10_k7.csv
+microscopy,3.1748,3,4.10271062933004,homa bay_J_hbA_s10_k7.csv
+microscopy,3.1748,4,4.685054261962058,homa bay_J_hbA_s10_k7.csv
+microscopy,3.1748,5,4.069963526399487,homa bay_J_hbA_s10_k7.csv
+microscopy,3.1748,6,3.911620789127379,homa bay_J_hbA_s10_k7.csv
+microscopy,3.1748,7,3.327376340026188,homa bay_J_hbA_s10_k7.csv
+microscopy,3.1748,8,3.606733071921544,homa bay_J_hbA_s10_k7.csv
+microscopy,3.1748,9,3.8501320699589416,homa bay_J_hbA_s10_k7.csv
+microscopy,4.0,0,3.232946143458677,homa bay_J_hbA_s10_k7.csv
+microscopy,4.0,1,3.269672425790318,homa bay_J_hbA_s10_k7.csv
+microscopy,4.0,2,3.592486294522958,homa bay_J_hbA_s10_k7.csv
+microscopy,4.0,3,3.566448473933536,homa bay_J_hbA_s10_k7.csv
+microscopy,4.0,4,3.281374583035213,homa bay_J_hbA_s10_k7.csv
+microscopy,4.0,5,3.4483184584672757,homa bay_J_hbA_s10_k7.csv
+microscopy,4.0,6,3.945144641966071,homa bay_J_hbA_s10_k7.csv
+microscopy,4.0,7,3.303273421912686,homa bay_J_hbA_s10_k7.csv
+microscopy,4.0,8,0.29717217930612805,homa bay_J_hbA_s10_k7.csv
+microscopy,4.0,9,3.9836498104442333,homa bay_J_hbA_s10_k7.csv
+microscopy,5.0397,0,3.6251533432246106,homa bay_J_hbA_s10_k7.csv
+microscopy,5.0397,1,4.158474805214314,homa bay_J_hbA_s10_k7.csv
+microscopy,5.0397,2,1.1239333633908113,homa bay_J_hbA_s10_k7.csv
+microscopy,5.0397,3,2.7687989736701786,homa bay_J_hbA_s10_k7.csv
+microscopy,5.0397,4,11.040799499594321,homa bay_J_hbA_s10_k7.csv
+microscopy,5.0397,5,4.658344654488023,homa bay_J_hbA_s10_k7.csv
+microscopy,5.0397,6,2.6427119453337085,homa bay_J_hbA_s10_k7.csv
+microscopy,5.0397,7,4.052707778872031,homa bay_J_hbA_s10_k7.csv
+microscopy,5.0397,8,3.4970830590972453,homa bay_J_hbA_s10_k7.csv
+microscopy,5.0397,9,3.5269930479843024,homa bay_J_hbA_s10_k7.csv
